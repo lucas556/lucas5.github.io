@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lucas5.xyz/sitemap.xml
