@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://lucas5.xyz/sitemap.xml
