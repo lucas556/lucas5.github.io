@@ -70,5 +70,5 @@ The script provides a foundational understanding of how private keys work in blo
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://lucas5.xyz/posts/generating-blockchain-private-key/  
+> URL: https://lucas5.xyz/posts/2310660125/  
 
