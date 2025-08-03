@@ -25,5 +25,5 @@ nvcc --version
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://lucas5.xyz/posts/0909320100/  
+> URL: https://lucas5.xyz/posts/cuda-nvcc%E5%AE%89%E8%A3%85/  
 
