@@ -3,7 +3,7 @@
 
 文中所有数据为虚构,可根据实际情况从区块链获取.
 
-#### 注意: 使用助记词(bip39/bip44)生成的地址使用了path,每个地址的公钥也不同,不适合使用该方法.
+#### 注意:使用助记词(bip39/bip44)生成的地址使用了path,每个地址的公钥也不同(即不同的链的公钥和私钥是不同的),不适合使用该方法(无法使用公钥跨链追踪).
 
 本文代码已托管：
 📎 [https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py](https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py)
