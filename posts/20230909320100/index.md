@@ -25,5 +25,5 @@ nvcc --version
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://lucas5.xyz/posts/20230909320100/  
+> URL: https://www.lucas5.pro/posts/20230909320100/  
 

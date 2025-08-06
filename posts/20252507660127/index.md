@@ -88,5 +88,5 @@ if not decoded.hex().startswith("41"):
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://lucas5.xyz/posts/20252507660127/  
+> URL: https://www.lucas5.pro/posts/20252507660127/  
 

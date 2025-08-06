@@ -45,5 +45,5 @@ The theme in use is [FixIt](https://github.com/hugo-fixit/FixIt), which is licen
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://lucas5.xyz/copyright/  
+> URL: https://www.lucas5.pro/copyright/  
 
