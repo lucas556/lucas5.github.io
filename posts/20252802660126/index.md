@@ -130,5 +130,5 @@ btc_address = Base58CheckEncode(address_bytes)  # 形如 1xxxx...
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://www.lucas5.pro/posts/20252802660126/  
+> URL: https://www.lucas6.xyz/posts/20252802660126/  
 

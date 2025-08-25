@@ -32,5 +32,5 @@
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://www.lucas5.pro/about/  
+> URL: https://www.lucas6.xyz/about/  
 

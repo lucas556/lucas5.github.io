@@ -125,5 +125,5 @@ export default {
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://www.lucas5.pro/posts/20250308660131/  
+> URL: https://www.lucas6.xyz/posts/20250308660131/  
 

@@ -26,5 +26,5 @@ export PATH=$PATH:$HOME/.cargo/bin
 ---
 
 > 作者: [Lucas](https://lucas5.xyz)  
-> URL: https://www.lucas5.pro/posts/20230909330112/  
+> URL: https://www.lucas6.xyz/posts/20230909330112/  
 
