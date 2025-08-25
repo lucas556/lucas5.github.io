@@ -106,6 +106,6 @@ $bitcoin$... : myoldpass2020
 
 ---
 
-> 作者: [Lucas](https://lucas5.xyz)  
+> 作者: [Lucas](https://www.lucas6.xyz)  
 > URL: https://www.lucas6.xyz/posts/20252607660128/  
 
