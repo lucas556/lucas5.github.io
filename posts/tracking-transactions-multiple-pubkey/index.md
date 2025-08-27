@@ -1,4 +1,4 @@
-# 基于区块链交易公钥在多链进行跨链追查：原理与实践
+# 基于区块链交易公钥在多链进行跨链追查: 原理与实践
 
 
 随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个**普适的技术思路**：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.
@@ -130,5 +130,5 @@ btc_address = Base58CheckEncode(address_bytes)  # 形如 1xxxx...
 ---
 
 > 作者: [Lucas](https://www.lucas6.xyz)  
-> URL: https://www.lucas6.xyz/posts/660126/  
+> URL: https://www.lucas6.xyz/posts/tracking-transactions-multiple-pubkey/  
 
