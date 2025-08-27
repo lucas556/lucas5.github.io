@@ -52,7 +52,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">GOPROXY&lt;/span>&lt;span class="o">=&lt;/span>https://goproxy.cn
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">source&lt;/span> ~/.bashrc&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>CUDA NVCC安装</title><link>https://www.lucas6.xyz/posts/320100/</link><pubDate>Sat, 09 Sep 2023 09:09:09 +0800</pubDate><guid>https://www.lucas6.xyz/posts/320100/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>CUDA运算需要安装NVCC&lt;/p>
+&lt;/div></description></item><item><title>CUDA NVCC安装</title><link>https://www.lucas6.xyz/posts/cuda-nvcc-install/</link><pubDate>Sat, 09 Sep 2023 09:09:09 +0800</pubDate><guid>https://www.lucas6.xyz/posts/cuda-nvcc-install/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>CUDA运算需要安装NVCC&lt;/p>
 &lt;p>安装cuda-toolkit-11-2(ubuntu18.04):&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
