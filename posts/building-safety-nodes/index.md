@@ -125,5 +125,5 @@ export default {
 ---
 
 > 作者: [Lucas](https://www.lucas6.xyz)  
-> URL: https://www.lucas6.xyz/posts/660131/  
+> URL: https://www.lucas6.xyz/posts/building-safety-nodes/  
 
