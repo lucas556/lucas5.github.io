@@ -107,5 +107,5 @@ $bitcoin$... : myoldpass2020
 ---
 
 > 作者: [Lucas](https://www.lucas6.xyz)  
-> URL: https://www.lucas6.xyz/posts/660128/  
+> URL: https://www.lucas6.xyz/posts/bitcoin2john-hashcat-brute-wallet-passwd/  
 
