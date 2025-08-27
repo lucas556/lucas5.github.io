@@ -182,5 +182,5 @@ A：完全可以.`coincurve` 本质是对 libsecp256k1 的 Python 封装；若�
 ---
 
 > 作者: [Lucas](https://www.lucas6.xyz)  
-> URL: https://www.lucas6.xyz/posts/660132/  
+> URL: https://www.lucas6.xyz/posts/gen-address-action/  
 
