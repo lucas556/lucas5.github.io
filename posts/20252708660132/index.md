@@ -5,7 +5,7 @@
 
 ---
 
-## 一、完整示例代码（可直接运行）
+## 一、完整示例代码(可直接运行)
 
 ### 依赖安装
 
@@ -140,7 +140,7 @@ while True:
 - **压缩公钥**：`0x02/0x03 || x(32B)`；常用于网络/链上存储、更省空间.  
 - 实战里两者都常用,脚本里一并输出更方便.
 
-### 5. “共同 20B”：以太坊与 Tron 地址的共同核心
+### 5. "共同 20B"：以太坊与 Tron 地址的共同核心
 
 - 定义：`Keccak-256(pub64)` 的**后 20 字节**.  
 - 以太坊：共同 20B → 十六进制 → **EIP-55** 校验（大小写混合）.  
@@ -149,12 +149,12 @@ while True:
 
 ---
 
-## 三、常见问答（Q&A）
+## 三、常见问答(Q&A)
 
-**Q1：用了 coincurve,为什么还需要 hashlib / pysha3？**  
-A：`coincurve` 负责椭圆曲线（secp256k1）运算；地址生成需要 **Keccak-256**（`pysha3`）与 **SHA-256**（`hashlib`,Tron 的双哈希校验）,以及 **Base58Check**（`base58`）.
+**Q1：为何不能使用 coincurve替代 hashlib / pysha3？**  
+A：`coincurve` 负责椭圆曲线(secp256k1)运算；地址生成需要 **Keccak-256**(`pysha3`)与 **SHA-256**(`hashlib`,Tron 的双哈希校验),以及 **Base58Check**（`base58`）.
 
-**Q2：为什么不是 `hashlib.sha3_256`？**  
+**Q2：为什么不使用 `hashlib.sha3_256`？**  
 A：以太坊使用的是“pre‑FIPS”的 **Keccak-256**,与 `hashlib.sha3_256`（FIPS SHA3-256）有细微差别,因此选择 `pysha3` 的 `sha3.keccak_256()`.
 
 **Q3：拒绝采样会不会卡住？**  
