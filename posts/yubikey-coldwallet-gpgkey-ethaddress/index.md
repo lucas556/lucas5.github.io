@@ -107,5 +107,5 @@ print("Ethereum 地址:", eth_address)
 ---
 
 > 作者: [Lucas](https://www.lucas6.xyz)  
-> URL: https://www.lucas6.xyz/posts/660130/  
+> URL: https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgkey-ethaddress/  
 
