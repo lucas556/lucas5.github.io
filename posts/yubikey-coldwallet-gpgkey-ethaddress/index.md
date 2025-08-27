@@ -3,7 +3,7 @@
 
 ## 背景与前文回顾
 
-本文是 [基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址](https://lucas5.xyz/posts/20252707660129/) 的延续.
+本文是 [基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址](https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/) 的延续.
 
 上一篇文章中,通过 **GPG 公钥的 ECPoint** 成功计算出了对应的 Ethereum 地址,用于验证 YubiKey 中的公钥是否匹配链上的地址.
 
