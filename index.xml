@@ -1,4 +1,96 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lucas's Blog</title><link>https://www.lucas6.xyz/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.4.0-alpha-20250721024521-a1cd700b</generator><language>en</language><lastBuildDate>Wed, 27 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://www.lucas6.xyz/index.xml" rel="self" type="application/rss+xml"/><item><title>区块链地址生成实战</title><link>https://www.lucas6.xyz/posts/660132/</link><pubDate>Wed, 27 Aug 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/660132/</guid><category domain="https://www.lucas6.xyz/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BC%80%E5%8F%91/">区块链开发</category><description>&lt;blockquote>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lucas's Blog</title><link>https://www.lucas6.xyz/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.4.0-alpha-20250721024521-a1cd700b</generator><language>en</language><lastBuildDate>Wed, 27 Aug 2025 23:00:00 +0800</lastBuildDate><atom:link href="https://www.lucas6.xyz/index.xml" rel="self" type="application/rss+xml"/><item><title>原火币(Huobi Global)资金提取完整指南</title><link>https://www.lucas6.xyz/posts/huobi-info-withdrawal-guide/</link><pubDate>Wed, 27 Aug 2025 23:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/posts/huobi-info-withdrawal-guide/</guid><category domain="https://www.lucas6.xyz/categories/%E4%BA%A4%E6%98%93%E6%89%80/">交易所</category><category domain="https://www.lucas6.xyz/categories/%E5%AE%89%E5%85%A8/">安全</category><description>&lt;p>过去几年,火币全球站(Huobi Global)在中国大陆逐步退出市场.自 &lt;strong>2021 年 9 月 24 日&lt;/strong> 起,火币停止为大陆用户注册,并在 &lt;strong>2021 年底前&lt;/strong>完成清退工作.后来,针对仍有资产未提走的大陆用户,火币专门上线了 &lt;a href="https://www.huobi.info/"target="_blank" rel="external nofollow noopener noreferrer">&lt;strong>huobi.info&lt;/strong>&lt;/a> 页面,用于资产托管与提取.&lt;/p>
+&lt;p>&lt;strong>huobi.info 是火币为中国大陆清退用户开设的专属页面,用户可以在这里查询和提取剩余数字资产.它并不是交易平台,只提供托管和提币功能.所有原火币的充币地址已经彻底作废,不能再使用.&lt;/strong>&lt;br>
+&lt;strong>特别提醒：最近网上出现了不少“有偿代提”的广告,声称可以代为在 huobi.info 上提币并收取手续费.完全没必要——流程自己就能完成；而且把账号信息交给第三方有巨大的资产风险.若遇到问题,直接联系官方客服(邮件回复很快)即可.&lt;/strong>&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="为什么要尽快提走">&lt;span>为什么要尽快提走？&lt;/span>
+ &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%b0%bd%e5%bf%ab%e6%8f%90%e8%b5%b0" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>旧地址已废弃&lt;/strong>：自 &lt;strong>2022-09-15 18:00(GMT+8)&lt;/strong> 起,火币彻底停止了大陆用户的&lt;strong>充币上账&lt;/strong>.继续往旧地址充值要么不上账,要么即便上账也可能在提币时被收取 &lt;strong>500 USDT/笔&lt;/strong> 的处理费,处理期通常 &lt;strong>≥ 20 个工作日&lt;/strong>.&lt;/li>
+&lt;li>&lt;strong>huobi.info 随时可能关闭&lt;/strong>：官方表述为“暂时不会关闭”,&lt;strong>未给具体时间表&lt;/strong>.&lt;/li>
+&lt;li>&lt;strong>账户管理费&lt;/strong>：自 &lt;strong>2022-02-01&lt;/strong> 起,每月对账户进行快照并收取管理费：
+&lt;ul>
+&lt;li>标准 &lt;strong>0.5% / 月&lt;/strong>；&lt;/li>
+&lt;li>单币种若折算为 USDT 后&lt;strong>应收不足 2 USDT&lt;/strong>,则&lt;strong>按 2 USDT 全额收取&lt;/strong>；&lt;/li>
+&lt;li>自 &lt;strong>2023-01-01&lt;/strong> 起,&lt;strong>增加每月 1 日 00:00 与 15 日 24:00(GMT+8)的快照/收取规则&lt;/strong>(当月可能出现两次扣费).&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>邮件提醒&lt;/strong>：你的注册邮箱会收到 &lt;strong>余额与提取提醒&lt;/strong>,以及 &lt;strong>每月管理费扣费邮件&lt;/strong>.这既能帮助你确认账户仍有余额,也是在提醒你&lt;strong>尽快提币&lt;/strong>,避免持续损耗.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 class="heading-element" id="提币前需要准备">&lt;span>提币前需要准备&lt;/span>
+ &lt;a href="#%e6%8f%90%e5%b8%81%e5%89%8d%e9%9c%80%e8%a6%81%e5%87%86%e5%a4%87" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ul>
+&lt;li>确认账户已完成 &lt;strong>实名认证(KYC)&lt;/strong>；&lt;/li>
+&lt;li>至少开启两种 &lt;strong>安全措施&lt;/strong>(如手机短信 + 谷歌验证器),以获得更高的每日提币额度(最高可至 &lt;strong>5,000,000 USDT/日&lt;/strong>,具体以页面提示为准).&lt;/li>
+&lt;li>若页面提示 &lt;strong>额度不足&lt;/strong>：将 &lt;strong>UID + 报错截图&lt;/strong> 发至官方邮箱 &lt;strong>&lt;a href="mailto:kefuniuniu@huobi.info"target="_blank" rel="external nofollow noopener noreferrer">kefuniuniu@huobi.info&lt;/a>&lt;/strong>,一般 &lt;strong>1–5 个工作日&lt;/strong>答复处理.&lt;/li>
+&lt;li>&lt;strong>额度提升有效期通常只有 24 小时&lt;/strong>：当天未用完的额度,次日可能需要重新申请,或分多日提币.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 class="heading-element" id="提币流程4-步操作">&lt;span>提币流程(4 步操作)&lt;/span>
+ &lt;a href="#%e6%8f%90%e5%b8%81%e6%b5%81%e7%a8%8b4-%e6%ad%a5%e6%93%8d%e4%bd%9c" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ol>
+&lt;li>访问 &lt;a href="https://www.huobi.info"target="_blank" rel="external nofollow noopener noreferrer">huobi.info&lt;/a> 并用&lt;strong>原火币账号与密码&lt;/strong>登录；&lt;/li>
+&lt;li>进入 &lt;strong>资产&lt;/strong> 页面,点击 &lt;strong>提币(Withdraw)&lt;/strong>；&lt;/li>
+&lt;li>选择币种 → 粘贴 &lt;strong>收款地址&lt;/strong> → 选择正确 &lt;strong>网络&lt;/strong>(如 BTC 主网 / ERC‑20 / TRC‑20 等)→ 核对 &lt;strong>手续费与到账金额&lt;/strong>；&lt;/li>
+&lt;li>完成二次验证(短信/邮箱/谷歌验证码),提交后在 &lt;strong>提币记录&lt;/strong> 中查看链上进度.&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>重要提示：&lt;strong>务必选对网络&lt;/strong>(例如 USDT 的 TRC‑20 vs ERC‑20),并留意是否需要 &lt;strong>Memo/Tag&lt;/strong>(如部分交易所对 XRP/EOS 等要求).网络或备注错误可能导致&lt;strong>永久丢失&lt;/strong>.&lt;/p>&lt;/blockquote>
+&lt;hr>
+&lt;h2 class="heading-element" id="常见问题与处理方法">&lt;span>常见问题与处理方法&lt;/span>
+ &lt;a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e4%b8%8e%e5%a4%84%e7%90%86%e6%96%b9%e6%b3%95" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;h3 class="heading-element" id="额度不足">&lt;span>额度不足&lt;/span>
+ &lt;a href="#%e9%a2%9d%e5%ba%a6%e4%b8%8d%e8%b6%b3" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>即使完成了认证和安全设置,系统仍可能提示额度不够.把 &lt;strong>UID + 完整页面截图&lt;/strong> 发送至 &lt;strong>&lt;a href="mailto:kefuniuniu@huobi.info"target="_blank" rel="external nofollow noopener noreferrer">kefuniuniu@huobi.info&lt;/a>&lt;/strong>,通常 &lt;strong>1–5 个工作日&lt;/strong>内处理.&lt;/p>
+&lt;h3 class="heading-element" id="丢失二次验证手机邮箱谷歌验证器">&lt;span>丢失二次验证(手机/邮箱/谷歌验证器)&lt;/span>
+ &lt;a href="#%e4%b8%a2%e5%a4%b1%e4%ba%8c%e6%ac%a1%e9%aa%8c%e8%af%81%e6%89%8b%e6%9c%ba%e9%82%ae%e7%ae%b1%e8%b0%b7%e6%ad%8c%e9%aa%8c%e8%af%81%e5%99%a8" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>若手机号停用、邮箱不可用,或谷歌验证器丢失,需要走人工审核.以下为 &lt;strong>官方客服的邮件原文&lt;/strong>(节选),可直接对照准备材料：&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>来自 Huobi.info 客服中心的邮件回复(节选)&lt;/strong>&lt;/p>
+&lt;p>一、如您安全项丢失,申请解换绑安全项需要您提供以下材料发送至客服邮箱 &lt;strong>&lt;a href="mailto:kefuniuniu@huobi.info"target="_blank" rel="external nofollow noopener noreferrer">kefuniuniu@huobi.info&lt;/a>&lt;/strong> ,邮件主题请填写：申请解绑/换绑(手机/邮箱/谷歌验证),发送成功后工作人员预计会在 &lt;strong>15 个工作日&lt;/strong> 内处理完毕,请您留意关注邮件通知.&lt;br>
+二、材料内容：&lt;br>
+● 请同时手持认证证件和白纸拍摄自拍照片上传,白纸上需书写申请当天日期和申请办理业务内容&lt;br>
+● 请您在邮件正文回答以下问题以便协助解换绑安全项：【直接回复邮件内】&lt;/p>
+&lt;ol>
+&lt;li>请说明您的姓名和身份证号码&lt;/li>
+&lt;li>请提供账户绑定的邮箱/手机号码&lt;/li>
+&lt;li>请您明确回复是要进行解绑还是进行换绑,如您需要换绑手机号,请您确认账户是否绑定邮箱,无绑定邮箱忽略此条问题,如绑定,绑定的邮箱是否可用,是的话可以为您直接解绑手机&lt;br>
+● 注意事项：&lt;/li>
+&lt;li>解换绑后 &lt;strong>24 小时内不能发起提币操作&lt;/strong>&lt;/li>
+&lt;li>请务必确保您所提供的照片真实清晰,证件上的信息不可进行修改和遮挡,可看清完整证件号和姓名&lt;/li>
+&lt;li>在为您解绑后,建议重新绑定谷歌验证,并&lt;strong>拍照保存二维码与密钥&lt;/strong>,以便下次找回&lt;/li>
+&lt;/ol>&lt;/blockquote>
+&lt;p>处理周期约 &lt;strong>15 个工作日&lt;/strong>,且&lt;strong>解绑后 24 小时内不可提币&lt;/strong>.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="安全提醒">&lt;span>安全提醒&lt;/span>
+ &lt;a href="#%e5%ae%89%e5%85%a8%e6%8f%90%e9%86%92" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>唯一官方客服邮箱：&lt;/strong> &lt;code>kefuniuniu@huobi.info&lt;/code>&lt;/li>
+&lt;li>&lt;strong>官方不会索要&lt;/strong>你的账号、密码、验证码等敏感信息；&lt;/li>
+&lt;li>&lt;strong>务必忽略“有偿代提”广告&lt;/strong>：不仅&lt;strong>没有必要&lt;/strong>,还存在&lt;strong>极高盗号/盗币风险&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>不要再向旧火币地址充值&lt;/strong>：要么不上账,要么可能触发高额处理费与漫长处理期&lt;/li>
+&lt;li>&lt;strong>留意邮箱通知&lt;/strong>：余额提示与每月管理费扣费邮件都是在提醒你尽快提走资产&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 class="heading-element" id="最后提醒">&lt;span>最后提醒&lt;/span>
+ &lt;a href="#%e6%9c%80%e5%90%8e%e6%8f%90%e9%86%92" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>&lt;strong>别拖延、别找第三方代提、自己按流程操作,尽快把资产安全提走.&lt;/strong>&lt;/p></description></item><item><title>区块链地址生成实战</title><link>https://www.lucas6.xyz/posts/660132/</link><pubDate>Wed, 27 Aug 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/660132/</guid><category domain="https://www.lucas6.xyz/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BC%80%E5%8F%91/">区块链开发</category><description>&lt;blockquote>
 &lt;p>这篇文章把可运行的 &lt;strong>完整示例代码&lt;/strong> 放在最前面,随后给出&lt;strong>逐步解析&lt;/strong>与 &lt;strong>Q&amp;amp;A&lt;/strong>.拷贝本文代码即可直接生成 ETH 与 Tron 地址,并理解背后的安全细节.&lt;/p>&lt;/blockquote>
 &lt;hr>
 &lt;h2 class="heading-element" id="一完整示例代码可直接运行">&lt;span>一、完整示例代码(可直接运行)&lt;/span>
@@ -1428,40 +1520,4 @@ GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquo
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
 &lt;/h2>&lt;p>This Python script demonstrates how to generate a private key for blockchain applications using random numbers and converting it into a hexadecimal format．The use of &lt;code>os.urandom&lt;/code> ensures a high level of randomness，crucial for secure private key generation．&lt;/p>
-&lt;p>The script provides a foundational understanding of how private keys work in blockchain systems．It can be expanded to include public key generation，signing transactions，and other cryptographic functions relevant to blockchain．&lt;/p></description></item><item><title>Rustup安装</title><link>https://www.lucas6.xyz/posts/330112/</link><pubDate>Sat, 09 Sep 2023 09:29:09 +0800</pubDate><guid>https://www.lucas6.xyz/posts/330112/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>依赖环境 Rustup 安装:&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">mkdir -p &lt;span class="nv">$HOME&lt;/span>/.cargo
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim $HOME/.cargo/config&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>source.crates-io&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">replace-with &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;ustc&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>source.ustc&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">registry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;git://mirrors.ustc.edu.cn/crates.io-index&amp;#34;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;hr>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">curl --proto &lt;span class="s1">&amp;#39;=https&amp;#39;&lt;/span> --tlsv1.2 -sSf https://sh.rustup.rs &lt;span class="p">|&lt;/span> sh
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim ~/.bashrc&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$PATH&lt;/span>:&lt;span class="nv">$HOME&lt;/span>/.cargo/bin&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div></description></item></channel></rss>
+&lt;p>The script provides a foundational understanding of how private keys work in blockchain systems．It can be expanded to include public key generation，signing transactions，and other cryptographic functions relevant to blockchain．&lt;/p></description></item></channel></rss>
