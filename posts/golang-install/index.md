@@ -16,5 +16,5 @@ source ~/.bashrc
 ---
 
 > 作者: [Lucas](https://www.lucas6.xyz)  
-> URL: https://www.lucas6.xyz/posts/330111/  
+> URL: https://www.lucas6.xyz/posts/golang-install/  
 
