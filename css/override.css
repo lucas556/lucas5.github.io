@@ -1,0 +1,15 @@
+/* 覆盖 Font Awesome 的 @font-face，加入 font-display */
+@font-face{
+  font-family:"Font Awesome 6 Free";
+  src:url("/lib/webfonts/fa-solid-900.woff2") format("woff2");
+  font-weight:900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Font Awesome 6 Free";
+  src:url("/lib/webfonts/fa-regular-400.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
