@@ -33,9 +33,9 @@ The following terms are for Chinese visitors only.
 
 ## Hugo 与主题版权 / Hugo & Theme License
 
-本站由 [Hugo](https://gohugo.io/) 静态网站生成器强力驱动，遵循 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) 开源协议.
+本站由 [Hugo](https://gohugo.io/) 静态网站生成器强力驱动,遵循 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) 开源协议.
 
-所用主题为 [FixIt](https://github.com/hugo-fixit/FixIt)，遵循 [MIT License](https://opensource.org/licenses/MIT) 开源协议.
+所用主题为 [FixIt](https://github.com/hugo-fixit/FixIt),遵循 [MIT License](https://opensource.org/licenses/MIT) 开源协议.
 
 This site is powered by [Hugo](https://gohugo.io/), a static site generator licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
