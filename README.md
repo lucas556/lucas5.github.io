@@ -1,7 +1,9 @@
 
 ## 关于我 About me
 
-你好,我是 Lucas,一位专注于区块链安全/密码学应用以及开发工具的技术人员. 博客采用 Hugo && Fixit ;博客主页: https://www.lucas6.xyz
+你好,我是 Lucas,一位专注于区块链安全/密码学应用以及开发工具的技术人员. 博客采用 Hugo && Fixit 
+
+博客主页: https://www.lucas6.xyz
 
 在过去的几年中,我在以下方向持续探索：
 
