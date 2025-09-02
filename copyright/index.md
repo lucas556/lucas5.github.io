@@ -1,14 +1,16 @@
-# 版权声明
+# 版权声明 | Copyright Notice
 
 
 ## 内容许可 / Content License
 
 本站内容(除非另有说明),默认遵循以下协议：
+The content of this website (unless otherwise stated) complies with the following agreement by default:
 
-- 中文：除特别说明,本站文章遵循 [署名-非商业性使用-禁止演绎 4.0 国际(CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh) 协议发布  
-- English: Unless otherwise stated, all contents are licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+- 除特别说明,本站文章遵循 [署名-非商业性使用-禁止演绎 4.0 国际(CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh) 协议发布  
+- Unless otherwise stated, all contents are licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 版权所有 © Lucas 2023 - 至今.
+All rights reserved © Lucas 2023 – Present.
 
 ## 内容更新说明 / Update Notes
 
@@ -18,9 +20,8 @@
 
 ## 附加条款 / Additional Terms
 
-The following terms are for Chinese visitors only.
-
 未经允许,禁止转载本站内容至以下平台及其子域/账号：
+Unauthorized reproduction of this website’s content on the following platforms and their subdomains/accounts is strictly prohibited:
 
 - CSDN
 - 百度贴吧
@@ -29,7 +30,8 @@ The following terms are for Chinese visitors only.
 - 知乎
 - 微信公众平台及所有封闭内容平台
 
-如需转载,请通过邮件或站内留言申请授权.
+如需转载,请通过邮件或留言申请授权.
+For reproduction or redistribution requests, please contact us via email or leave a message to obtain authorization.
 
 ## Hugo 与主题版权 / Hugo & Theme License
 
