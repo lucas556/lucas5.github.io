@@ -17,7 +17,6 @@ description: "介绍如何用 YubiKey FIDO2 的 PRF 扩展派生密钥(KEK),用�
 使用 YubiKey 在用户触控与 PIN 验证后对**每条私钥**计算一次 PRF(salt),再用 HKDF-SHA256 将 PRF 输出扩展为对称密钥(KEK),以 AES-256-GCM 加密私钥并把最小必要的元数据(rp_id/credential_id/salt_prf/iv/ciphertext/address 等)写入本地 `privkey_keystore.json`.后续解密需要同一 YubiKey/同一 RP ID 与同一 credential_id,并在用户同意触控/输入 PIN 后复现 KEK 解密出私钥.
 
 本文说明代码的设计逻辑/关键安全考量/使用方法与示例,并提供源码链接与可下载的示例 keystore 结构说明.
-
 ---
 
 ## 项目背景与目标
