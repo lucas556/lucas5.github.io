@@ -1,10 +1,26 @@
 # 基于 YubiKey 的冷钱包探索3：使用 FIDO2 派生 KEK 加密私钥并管理以太坊地址
 
 
+# 该文使用的所有代码都是试验性的,并未得到验证,这里只是提供一个思路和方法,不可以此作为生产环境.
+# 该文使用的所有代码都是试验性的,并未得到验证,这里只是提供一个思路和方法,不可以此作为生产环境.
+# 该文使用的所有代码都是试验性的,并未得到验证,这里只是提供一个思路和方法,不可以此作为生产环境.
+
+## 相关源码
+
+- `fido2_kek.py`(派生 KEK / 与 YubiKey 交互):  
+  https://github.com/lucas556/yubikey-wallet/blob/main/fido2_kek.py
+
+- `seed_keystore.py`(早期的 seed keystore 实现,供对比):  
+  https://github.com/lucas556/yubikey-wallet/blob/main/seed_keystore.py
+
+建议查看上面两个文件以理解完整细节与历史演进.
+
+---
+
 # 基于 YubiKey 的冷钱包探索 3：使用 FIDO2 派生 KEK 加密私钥并管理以太坊地址
 
 本篇文章以实用与工程实现为主,介绍一个基于 YubiKey(FIDO2)PRF 扩展的本地冷钱包思路：  
-使用 YubiKey 在用户触控与 PIN 验证后对**每条私钥**计算一次 PRF(salt),再用 HKDF-SHA256 将 PRF 输出扩展为对称密钥(KEK),以 AES-256-GCM 加密私钥并把最小必要的元数据(rp_id/credential_id/salt_prf/iv/ciphertext/address 等)写入本地 `privkey_keystore.json`.后续解密需要同一 YubiKey/同一 RP ID 与同一 credential_id,并在用户同意触控/输入 PIN 后复现 KEK 解密出私钥.
+使用 YubiKey 在用户触控与 PIN 验证后对**每条私钥**计算一次 PRF(salt),再用 HKDF-SHA256 将 PRF 输出扩展为对称密钥(KEK),以 AES-256-GCM 加密私钥并把最小必要的元数据 (rp_id/credential_id/salt_prf/iv/ciphertext/address 等) 写入本地 `privkey_keystore.json`.后续解密需要同一 YubiKey/同一 RP ID 与同一 credential_id,并在用户同意触控/输入 PIN 后复现 KEK 解密出私钥.
 
 本文说明代码的设计逻辑/关键安全考量/使用方法与示例,并提供源码链接与可下载的示例 keystore 结构说明.
 ---
@@ -155,7 +171,7 @@ python3 cli.py
 2. **YubiKey 被盗**：若攻击者获得了 YubiKey **且**知道/绕过了 PIN,则可解密所有条目(同一 credential 的所有条目仍需要 salt,但 salt 存储于文件;因此窃取 YubiKey + 凭证 ID + PIN 就能解密).减缓：为 YubiKey 设置 PIN,并考虑用多因素或将凭证分布到多把 YubiKey.
 3. **Side-channel / Host compromise**：若主机被完全控制(恶意驱动或内核级监控),则攻击者能在用户解密时即时拷贝明文私钥或劫持签名流程.减缓：尽量在离线/受信环境中进行敏感操作;使用离线签名策略(在隔离主机或受限环境签名).
 4. **PRF / HKDF 安全**：PRF 由设备实现,理论上等价于 HMAC(K_cred, salt).HKDF 是公认的安全扩展.使用 info 作为用途分离是良好实践.
-
+5. **Yubikey丢失风险**: **如果硬件丢失,将无法解密,建议备份**
 ---
 
 ## 代码关键点(实现注意事项)
