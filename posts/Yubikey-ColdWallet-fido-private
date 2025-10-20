@@ -1,10 +1,14 @@
 ---
 title: "基于 YubiKey 的冷钱包探索 3：使用 FIDO2 派生 KEK 加密私钥并管理以太坊地址"
 date: 2025-10-20T00:00:00+08:00
+author: "Lucas"
 draft: false
 tags: ["YubiKey","coldwallet","hardware wallet","FIDO2","Ethereum","security"]
-categories: ["coldwallet","Ethereum"]
-summary: "介绍如何用 YubiKey FIDO2 的 PRF 扩展派生密钥(KEK),用以 AES-GCM 加密本地私钥,并用一个轻量 keystore 管理以太坊地址.包含设计原理/安全性讨论与使用指南."
+keywords: ["YubiKey", "fido", "private", "冷钱包", "coldwallet"]
+categories: 
+  - "coldwallet"
+  - "Ethereum"
+description: "介绍如何用 YubiKey FIDO2 的 PRF 扩展派生密钥(KEK),用以 AES-GCM 加密本地私钥,并用一个轻量 keystore 管理以太坊地址.包含设计原理/安全性讨论与使用指南."
 ---
 
 # 基于 YubiKey 的冷钱包探索 3：使用 FIDO2 派生 KEK 加密私钥并管理以太坊地址
