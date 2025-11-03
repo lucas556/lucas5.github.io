@@ -1,3 +1,0 @@
-||chat.openai.com
-||openai.com
-||chatgpt.com
