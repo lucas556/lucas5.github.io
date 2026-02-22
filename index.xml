@@ -1,4 +1,193 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lucas's Blog</title><link>https://www.lucas6.xyz/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.3.20</generator><language>en</language><lastBuildDate>Sat, 21 Feb 2026 04:00:00 +0000</lastBuildDate><atom:link href="https://www.lucas6.xyz/index.xml" rel="self" type="application/rss+xml"/><item><title>从区块链签名中恢复 secp256k1 公钥(Ethereum 实战)</title><link>https://www.lucas6.xyz/crypto/ethereum-signature-recovery/</link><pubDate>Sat, 21 Feb 2026 04:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/crypto/ethereum-signature-recovery/</guid><description>&lt;p>文中所有数据为虚构,可根据实际情况从区块链获取.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lucas's Blog</title><link>https://www.lucas6.xyz/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.3.20</generator><language>en</language><lastBuildDate>Sun, 22 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://www.lucas6.xyz/index.xml" rel="self" type="application/rss+xml"/><item><title>How to Build and Sign TRON Offline Transactions in Python (Cold Wallet &amp; Air-Gapped Setup)</title><link>https://www.lucas6.xyz/blockchain/tron-offline-transaction-signing-python/</link><pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/blockchain/tron-offline-transaction-signing-python/</guid><description>&lt;h2 class="heading-element" id="abstract">&lt;span>Abstract&lt;/span>
+ &lt;a href="#abstract" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>This guide explains how to construct and sign TRON &lt;code>TransferContract&lt;/code>
+transactions locally without using the &lt;code>createtransaction&lt;/code> RPC API. By
+manually assembling protobuf-encoded raw data and signing with
+secp256k1, we enable secure offline transaction workflows suitable for
+cold wallets and air-gapped environments.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="introduction">&lt;span>Introduction&lt;/span>
+ &lt;a href="#introduction" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>In certain development and security scenarios, higher control over the
+transaction lifecycle is required. For example:&lt;/p>
+&lt;ul>
+&lt;li>Hardware wallet signing&lt;/li>
+&lt;li>Cold wallet offline workflows&lt;/li>
+&lt;li>Air-gapped secure environments&lt;/li>
+&lt;li>Institutional custody systems&lt;/li>
+&lt;/ul>
+&lt;p>In these cases, relying on the TRON node&amp;rsquo;s &lt;code>createtransaction&lt;/code> API is
+not ideal. Instead, we must:&lt;/p>
+&lt;ol>
+&lt;li>Construct the transaction structure locally\&lt;/li>
+&lt;li>Populate block reference fields manually\&lt;/li>
+&lt;li>Sign using secp256k1 private keys\&lt;/li>
+&lt;li>Broadcast the final signed transaction&lt;/li>
+&lt;/ol>
+&lt;p>Full Python implementation:&lt;/p>
+&lt;p>&lt;a href="https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/Offline_transactions.py"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/Offline_transactions.py&lt;/a>&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="official-rpc-vs-offline-construction">&lt;span>Official RPC vs Offline Construction&lt;/span>
+ &lt;a href="#official-rpc-vs-offline-construction" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;hr>
+&lt;p>Feature Official &lt;code>createtransaction&lt;/code> Offline Construction&lt;/p>
+&lt;hr>
+&lt;p>Transaction Built by remote node Fully controlled locally
+structure&lt;/p>
+&lt;p>Privacy Exposes structure to RPC Fully local construction&lt;/p>
+&lt;p>Flexibility Limited customization Full control of block
+refs, timestamps,
+signature&lt;/p>
+&lt;h2 class="heading-element" id="wallets-audit-systems">&lt;span>Use case Hot wallets Cold wallets, hardware
+wallets, audit systems&lt;/span>
+ &lt;a href="#wallets-audit-systems" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>Unlike the official &lt;code>createtransaction&lt;/code> RPC method, offline construction
+ensures that private keys never interact with remote TRON nodes.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="transaction-construction-workflow">&lt;span>Transaction Construction Workflow&lt;/span>
+ &lt;a href="#transaction-construction-workflow" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ol>
+&lt;li>Fetch latest block using &lt;code>getblock&lt;/code>&lt;/li>
+&lt;li>Construct a &lt;code>TransferContract&lt;/code>&lt;/li>
+&lt;li>Populate required fields:
+&lt;ul>
+&lt;li>&lt;code>ref_block_bytes&lt;/code>&lt;/li>
+&lt;li>&lt;code>ref_block_hash&lt;/code>&lt;/li>
+&lt;li>&lt;code>expiration&lt;/code>&lt;/li>
+&lt;li>&lt;code>timestamp&lt;/code>&lt;/li>
+&lt;li>&lt;code>owner_address&lt;/code>&lt;/li>
+&lt;li>&lt;code>to_address&lt;/code>&lt;/li>
+&lt;li>&lt;code>amount&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Encode raw transaction using TRON protobuf format&lt;/li>
+&lt;li>Hash transaction&lt;/li>
+&lt;li>Sign using secp256k1 (ECDSA + SHA-256)&lt;/li>
+&lt;li>Broadcast to TRON mainnet&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h2 class="heading-element" id="address-format-requirements">&lt;span>Address Format Requirements&lt;/span>
+ &lt;a href="#address-format-requirements" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>TRON addresses must:&lt;/p>
+&lt;ul>
+&lt;li>Be Base58Check decoded&lt;/li>
+&lt;li>Start with hex prefix &lt;code>41&lt;/code> (mainnet)&lt;/li>
+&lt;/ul>
+&lt;p>Example:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">base58&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">decoded&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">base58&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">b58decode_check&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">base58_address&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">decoded&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">startswith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;41&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="ne">ValueError&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Invalid Tron address&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 class="heading-element" id="block-reference-fields">&lt;span>Block Reference Fields&lt;/span>
+ &lt;a href="#block-reference-fields" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>Each TRON transaction must include:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>ref_block_bytes&lt;/code>: block height modulo 65536&lt;/li>
+&lt;li>&lt;code>ref_block_hash&lt;/code>: first 8 bytes of block ID&lt;/li>
+&lt;/ul>
+&lt;p>If mismatched, the network returns:&lt;/p>
+&lt;p>&lt;code>INVALID_BLOCK_REFERENCE&lt;/code>&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="signing-mechanism">&lt;span>Signing Mechanism&lt;/span>
+ &lt;a href="#signing-mechanism" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>TRON uses the &lt;strong>secp256k1 elliptic curve&lt;/strong>, the same curve used in
+Bitcoin and Ethereum.&lt;/p>
+&lt;p>Signature process:&lt;/p>
+&lt;ol>
+&lt;li>Hash raw transaction with SHA-256\&lt;/li>
+&lt;li>Sign using ECDSA secp256k1 private key\&lt;/li>
+&lt;li>Store signature as hex in array format:&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;signature&amp;#34;&lt;/span>&lt;span class="err">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;hex_encoded_signature&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 class="heading-element" id="protobuf-encoding-requirements">&lt;span>Protobuf Encoding Requirements&lt;/span>
+ &lt;a href="#protobuf-encoding-requirements" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>TRON transactions are &lt;strong>protobuf-encoded structures&lt;/strong>.&lt;/p>
+&lt;p>Important:&lt;/p>
+&lt;ul>
+&lt;li>Field ordering matters&lt;/li>
+&lt;li>Tag numbers must match protocol definition&lt;/li>
+&lt;li>Byte encoding must be exact&lt;/li>
+&lt;/ul>
+&lt;p>Any deviation will invalidate the transaction.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="practical-use-cases">&lt;span>Practical Use Cases&lt;/span>
+ &lt;a href="#practical-use-cases" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>This offline signing method is ideal for:&lt;/p>
+&lt;ul>
+&lt;li>Hardware wallet integration&lt;/li>
+&lt;li>Cold storage signing&lt;/li>
+&lt;li>Air-gapped security environments&lt;/li>
+&lt;li>Institutional custody systems&lt;/li>
+&lt;li>Blockchain forensic analysis&lt;/li>
+&lt;li>Regulatory audit tools&lt;/li>
+&lt;li>Multi-signature aggregation systems&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 class="heading-element" id="conclusion">&lt;span>Conclusion&lt;/span>
+ &lt;a href="#conclusion" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>By manually constructing and signing TRON transactions locally, we
+achieve:&lt;/p>
+&lt;ul>
+&lt;li>Full transaction control\&lt;/li>
+&lt;li>Secure air-gapped signing\&lt;/li>
+&lt;li>RPC-independent workflows\&lt;/li>
+&lt;li>Compatibility with hardware wallets&lt;/li>
+&lt;/ul>
+&lt;p>Understanding secp256k1 cryptography and protobuf encoding allows
+developers to build secure custody systems and forensic-grade
+transaction tools.&lt;/p>
+&lt;h2 class="heading-element" id="related-articles">&lt;span>Related Articles&lt;/span>
+ &lt;a href="#related-articles" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ul>
+&lt;li>&lt;a href="https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/">Cross-Chain Public Key Tracing Explained&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.lucas6.xyz/crypto/generate-blockchain-private-key-python/">How to Generate Secure Blockchain Private Keys in Python&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.lucas6.xyz/security/prevent-erc20-approval-scams-proactive-defense-node/">Prevent ERC20 Approval Scams with a Proactive Defense Node&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>从区块链签名中恢复 secp256k1 公钥(Ethereum 实战)</title><link>https://www.lucas6.xyz/crypto/ethereum-signature-recovery/</link><pubDate>Sat, 21 Feb 2026 04:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/crypto/ethereum-signature-recovery/</guid><description>&lt;p>文中所有数据为虚构,可根据实际情况从区块链获取.&lt;/p>
 &lt;h4 class="heading-element" id="注意使用助记词bip39bip44生成的地址使用了path每个地址的公钥也不同即不同的链的公钥和私钥是不同的不适合使用该方法无法使用公钥跨链追踪">&lt;span>注意:使用助记词(bip39/bip44)生成的地址使用了path,每个地址的公钥也不同(即不同的链的公钥和私钥是不同的),不适合使用该方法(无法使用公钥跨链追踪).&lt;/span>
  &lt;a href="#%e6%b3%a8%e6%84%8f%e4%bd%bf%e7%94%a8%e5%8a%a9%e8%ae%b0%e8%af%8dbip39bip44%e7%94%9f%e6%88%90%e7%9a%84%e5%9c%b0%e5%9d%80%e4%bd%bf%e7%94%a8%e4%ba%86path%e6%af%8f%e4%b8%aa%e5%9c%b0%e5%9d%80%e7%9a%84%e5%85%ac%e9%92%a5%e4%b9%9f%e4%b8%8d%e5%90%8c%e5%8d%b3%e4%b8%8d%e5%90%8c%e7%9a%84%e9%93%be%e7%9a%84%e5%85%ac%e9%92%a5%e5%92%8c%e7%a7%81%e9%92%a5%e6%98%af%e4%b8%8d%e5%90%8c%e7%9a%84%e4%b8%8d%e9%80%82%e5%90%88%e4%bd%bf%e7%94%a8%e8%af%a5%e6%96%b9%e6%b3%95%e6%97%a0%e6%b3%95%e4%bd%bf%e7%94%a8%e5%85%ac%e9%92%a5%e8%b7%a8%e9%93%be%e8%bf%bd%e8%b8%aa" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
@@ -1450,122 +1639,7 @@ GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquo
 &lt;/li>
 &lt;/ul>
 &lt;hr>
-&lt;p>这是一个完全离线、透明、受控的恢复流程,适用于你希望亲自操作而不依赖第三方服务的情况.如果你使用的是冷钱包、遗忘了早期钱包密码,这种方式是目前最稳妥的尝试路径.&lt;/p></description></item><item><title>本地构造TronTransaction转账交易</title><link>https://www.lucas6.xyz/blockchain/%E6%9C%AC%E5%9C%B0%E6%9E%84%E9%80%A0trontransaction%E8%BD%AC%E8%B4%A6%E4%BA%A4%E6%98%93/</link><pubDate>Fri, 25 Jul 2025 22:30:00 +0800</pubDate><guid>https://www.lucas6.xyz/blockchain/%E6%9C%AC%E5%9C%B0%E6%9E%84%E9%80%A0trontransaction%E8%BD%AC%E8%B4%A6%E4%BA%A4%E6%98%93/</guid><description>&lt;p>在实际开发中,某些场景要求我们对交易过程具备更高的可控性与安全性.比如在硬件钱包中使用私钥签名,或在冷隔离环境下进行离线交易构造时,必须避免依赖 TRON 节点的 &lt;code>createtransaction&lt;/code> 接口.这就需要我们&lt;strong>在本地构造交易结构、手动填入区块数据并完成签名&lt;/strong>,再广播至主网.&lt;/p>
-&lt;p>本文完整的 Python 代码已托管：&lt;/p>
-&lt;p>📎 &lt;a href="https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/Offline_transactions.py"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/Offline_transactions.py&lt;/a>&lt;/p>
-&lt;hr>
-&lt;h2 class="heading-element" id="官方接口与本地构造的区别">&lt;span>官方接口与本地构造的区别&lt;/span>
- &lt;a href="#%e5%ae%98%e6%96%b9%e6%8e%a5%e5%8f%a3%e4%b8%8e%e6%9c%ac%e5%9c%b0%e6%9e%84%e9%80%a0%e7%9a%84%e5%8c%ba%e5%88%ab" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;table>
- &lt;thead>
- &lt;tr>
- &lt;th>对比项&lt;/th>
- &lt;th>官方 createtransaction 接口&lt;/th>
- &lt;th>本地构造流程&lt;/th>
- &lt;/tr>
- &lt;/thead>
- &lt;tbody>
- &lt;tr>
- &lt;td>构造行为&lt;/td>
- &lt;td>节点服务端生成交易结构&lt;/td>
- &lt;td>客户端全流程手动构造&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>安全控制&lt;/td>
- &lt;td>交易内容与结构暴露于远程节点&lt;/td>
- &lt;td>整个过程在本地完成,避免隐私泄露&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>灵活性&lt;/td>
- &lt;td>固定字段结构,较难扩展&lt;/td>
- &lt;td>自定义区块引用、时间、签名等细节&lt;/td>
- &lt;/tr>
- &lt;tr>
- &lt;td>适用场景&lt;/td>
- &lt;td>适合热钱包、高速交互&lt;/td>
- &lt;td>适合冷钱包、隔离签名、多签、审计分析&lt;/td>
- &lt;/tr>
- &lt;/tbody>
-&lt;/table>
-&lt;hr>
-&lt;h2 class="heading-element" id="构造流程概览">&lt;span>构造流程概览&lt;/span>
- &lt;a href="#%e6%9e%84%e9%80%a0%e6%b5%81%e7%a8%8b%e6%a6%82%e8%a7%88" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>这里使用 Python 代码完成以下步骤：&lt;/p>
-&lt;ol>
-&lt;li>调用 &lt;code>getblock&lt;/code> 接口获取最新块引用&lt;/li>
-&lt;li>构造 TransferContract 类型的交易结构&lt;/li>
-&lt;li>填充区块字段、地址、金额、过期时间、时间戳&lt;/li>
-&lt;li>使用 secp256k1 私钥进行签名&lt;/li>
-&lt;li>生成 txID&lt;/li>
-&lt;li>广播交易到主网&lt;/li>
-&lt;/ol>
-&lt;hr>
-&lt;h2 class="heading-element" id="注意">&lt;span>注意&lt;/span>
- &lt;a href="#%e6%b3%a8%e6%84%8f" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;h3 class="heading-element" id="地址格式转换">&lt;span>地址格式转换&lt;/span>
- &lt;a href="#%e5%9c%b0%e5%9d%80%e6%a0%bc%e5%bc%8f%e8%bd%ac%e6%8d%a2" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>Tron 地址需通过 base58 解码为 hex 字符串,且必须以 &lt;code>41&lt;/code> 开头（代表主网地址）.若未严格使用 &lt;code>base58.b58decode_check&lt;/code> 函数,会导致签名无效或节点拒绝交易.&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">decoded&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">base58&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">b58decode_check&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">base58_address&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="ow">not&lt;/span> &lt;span class="n">decoded&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">startswith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;41&amp;#34;&lt;/span>&lt;span class="p">):&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="ne">ValueError&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Invalid Tron address&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;hr>
-&lt;h3 class="heading-element" id="区块引用字段要求">&lt;span>区块引用字段要求&lt;/span>
- &lt;a href="#%e5%8c%ba%e5%9d%97%e5%bc%95%e7%94%a8%e5%ad%97%e6%ae%b5%e8%a6%81%e6%b1%82" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>每笔交易必须携带：&lt;/p>
-&lt;ul>
-&lt;li>&lt;code>ref_block_bytes&lt;/code>: 当前区块高度对 65536 的模&lt;/li>
-&lt;li>&lt;code>ref_block_hash&lt;/code>: 区块 ID 前 8 字节（16 hex 字符）&lt;/li>
-&lt;/ul>
-&lt;p>这两者必须与最新块匹配,否则将返回 &lt;code>INVALID_BLOCK_REFERENCE&lt;/code>.&lt;/p>
-&lt;hr>
-&lt;h3 class="heading-element" id="签名方式">&lt;span>签名方式&lt;/span>
- &lt;a href="#%e7%ad%be%e5%90%8d%e6%96%b9%e5%bc%8f" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>使用标准 secp256k1 曲线进行 ECDSA 签名（SHA-256 摘要）,代码中使用 &lt;code>cryptography.hazmat&lt;/code> 库完成.注意,签名必须转 hex,并以数组形式存放：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="s2">&amp;#34;signature&amp;#34;&lt;/span>&lt;span class="err">:&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;hex_encoded_signature&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;hr>
-&lt;h3 class="heading-element" id="字节结构需遵循协议">&lt;span>字节结构需遵循协议&lt;/span>
- &lt;a href="#%e5%ad%97%e8%8a%82%e7%bb%93%e6%9e%84%e9%9c%80%e9%81%b5%e5%be%aa%e5%8d%8f%e8%ae%ae" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>原始交易数据需严格按 TRON protobuf 编码规则手动构造,包括 tag 编号、顺序、字段类型.该代码实现适用于标准的 TransferContract,其他合约类型需调整字段顺序与类型标记.&lt;/p>
-&lt;hr>
-&lt;h2 class="heading-element" id="应用场景举例">&lt;span>应用场景举例&lt;/span>
- &lt;a href="#%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af%e4%b8%be%e4%be%8b" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;ul>
-&lt;li>&lt;strong>硬件钱包交互&lt;/strong>：仅接受交易结构,不依赖 createtransaction 接口,可配合 Ledger、Trezor 等使用&lt;/li>
-&lt;li>&lt;strong>冷钱包离线签名&lt;/strong>：在 air-gapped 环境下构造 raw_data 并签名后导出&lt;/li>
-&lt;li>&lt;strong>合规审计分析工具&lt;/strong>：可以还原交易结构与 txID,辅助监管与链上取证&lt;/li>
-&lt;li>&lt;strong>多签钱包或聚合交易系统&lt;/strong>：可灵活控制多笔交易批量构造与签名行为&lt;/li>
-&lt;/ul>
-&lt;hr></description></item><item><title>Cross-Chain Public Key Tracing: Recovering Ethereum Transaction Public Keys and Verifying Bitcoin Usage</title><link>https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/</link><pubDate>Fri, 28 Feb 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/</guid><description>&lt;p>随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个&lt;strong>普适的技术思路&lt;/strong>：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.&lt;/p>
+&lt;p>这是一个完全离线、透明、受控的恢复流程,适用于你希望亲自操作而不依赖第三方服务的情况.如果你使用的是冷钱包、遗忘了早期钱包密码,这种方式是目前最稳妥的尝试路径.&lt;/p></description></item><item><title>Cross-Chain Public Key Tracing: Recovering Ethereum Transaction Public Keys and Verifying Bitcoin Usage</title><link>https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/</link><pubDate>Fri, 28 Feb 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/</guid><description>&lt;p>随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个&lt;strong>普适的技术思路&lt;/strong>：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.&lt;/p>
 &lt;h2 class="heading-element" id="abstract">&lt;span>Abstract&lt;/span>
  &lt;a href="#abstract" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
