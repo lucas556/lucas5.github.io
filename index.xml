@@ -870,134 +870,7 @@ A：完全可以.&lt;code>coincurve&lt;/code> 本质是对 libsecp256k1 的 Pyth
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
 &lt;/h2>&lt;p>通过主动防御节点,我们能有效防范区块链授权类诈骗,保护资产安全.本方案除了以太坊外,同样适用于币安智能链(BSC);Polygon等EVM兼容链,实际使用时只需更换相应RPC地址.&lt;/p>
-&lt;p>未来还可考虑集成诈骗地址实时数据库;报警通知系统（如Telegram或钉钉）,进一步提升安全性.&lt;/p></description></item><item><title>基于 YubiKey 的冷钱包探索 2：使用 GPG 私钥生成以太坊地址</title><link>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgkey-ethaddress/</link><pubDate>Mon, 28 Jul 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgkey-ethaddress/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/security/">Security</category><category domain="https://www.lucas6.xyz/categories/coldwallet/">Coldwallet</category><description>&lt;h2 class="heading-element" id="背景与前文回顾">&lt;span>背景与前文回顾&lt;/span>
- &lt;a href="#%e8%83%8c%e6%99%af%e4%b8%8e%e5%89%8d%e6%96%87%e5%9b%9e%e9%a1%be" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>本文是 &lt;a href="https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/"target="_blank" rel="external nofollow noopener noreferrer">基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址&lt;/a> 的延续.&lt;/p>
-&lt;p>上一篇文章中,通过 &lt;strong>GPG 公钥的 ECPoint&lt;/strong> 成功计算出了对应的 Ethereum 地址,用于验证 YubiKey 中的公钥是否匹配链上的地址.&lt;/p>
-&lt;p>但现实中,GPG 导出的公钥可能只是为了验证正确性,&lt;strong>更重要的是将 GPG 私钥转为 Ethereum 私钥,构造完整的钱包逻辑&lt;/strong>.这正是本篇要解决的问题.&lt;/p>
-&lt;hr>
-&lt;h2 class="heading-element" id="目标与思路">&lt;span>目标与思路&lt;/span>
- &lt;a href="#%e7%9b%ae%e6%a0%87%e4%b8%8e%e6%80%9d%e8%b7%af" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>&lt;strong>目标:&lt;/strong> 从 YubiKey 导出的 GPG 私钥中,提取出 secp256k1 标量私钥,转换为标准 Ethereum 私钥,并派生出公钥与地址.&lt;/p>
-&lt;p>这将验证:&lt;/p>
-&lt;blockquote>
-&lt;p>GPG 保存的 secp256k1 私钥能否兼容以太坊签名&lt;br>
-GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquote>
-&lt;hr>
-&lt;h2 class="heading-element" id="使用脚本">&lt;span>使用脚本&lt;/span>
- &lt;a href="#%e4%bd%bf%e7%94%a8%e8%84%9a%e6%9c%ac" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>核心逻辑代码:&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">pgpy&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">PGPKey&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">eth_keys&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">keys&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">eth_utils&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">to_checksum_address&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 1. 读取 privkey.asc&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">with&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;privkey.asc&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;r&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">f&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">blob&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 2. 加载 GPG 私钥对象&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">key&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">PGPKey&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_blob&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">blob&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 3. 提取 secp256k1 私钥标量（即 Ethereum 私钥）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">d&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">keymaterial&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 转为标准 Ethereum 私钥 hex 字符串&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">eth_privkey&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">d&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">32&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Ethereum 私钥 (hex):&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">eth_privkey&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 4. 派生 Ethereum 公钥与地址&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">priv_key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">keys&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">PrivateKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">bytes&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fromhex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">eth_privkey&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Ethereum 公钥:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">priv_key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">public_key&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">eth_address&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">to_checksum_address&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv_key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">public_key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_address&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Ethereum 地址:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">eth_address&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;hr>
-&lt;h2 class="heading-element" id="脚本逻辑说明">&lt;span>脚本逻辑说明&lt;/span>
- &lt;a href="#%e8%84%9a%e6%9c%ac%e9%80%bb%e8%be%91%e8%af%b4%e6%98%8e" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;h3 class="heading-element" id="1-读取并解析-gpg-私钥">&lt;span>1. 读取并解析 GPG 私钥&lt;/span>
- &lt;a href="#1-%e8%af%bb%e5%8f%96%e5%b9%b6%e8%a7%a3%e6%9e%90-gpg-%e7%a7%81%e9%92%a5" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>从 &lt;code>privkey.asc&lt;/code> 中加载私钥对象,并解析出其 &lt;code>.s&lt;/code> 字段,即 secp256k1 的标量 &lt;code>d&lt;/code> 值.这个值就是以太坊钱包最核心的 256 位私钥.&lt;/p>
-&lt;h3 class="heading-element" id="2-转换为-ethereum-标准私钥格式">&lt;span>2. 转换为 Ethereum 标准私钥格式&lt;/span>
- &lt;a href="#2-%e8%bd%ac%e6%8d%a2%e4%b8%ba-ethereum-%e6%a0%87%e5%87%86%e7%a7%81%e9%92%a5%e6%a0%bc%e5%bc%8f" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>将私钥标量转成 32 字节并以 &lt;code>hex&lt;/code> 显示,便于导入钱包或进行加密签名.&lt;/p>
-&lt;h3 class="heading-element" id="3-派生公钥与地址">&lt;span>3. 派生公钥与地址&lt;/span>
- &lt;a href="#3-%e6%b4%be%e7%94%9f%e5%85%ac%e9%92%a5%e4%b8%8e%e5%9c%b0%e5%9d%80" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>借助 &lt;code>eth_keys&lt;/code> 库：&lt;/p>
-&lt;ul>
-&lt;li>通过私钥计算出对应的公钥（未压缩格式）&lt;/li>
-&lt;li>使用 keccak(公钥)[-20:] 获取以太坊地址&lt;/li>
-&lt;li>加上 checksum,构造最终地址&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h2 class="heading-element" id="关键验证地址一致性">&lt;span>关键验证:地址一致性&lt;/span>
- &lt;a href="#%e5%85%b3%e9%94%ae%e9%aa%8c%e8%af%81%e5%9c%b0%e5%9d%80%e4%b8%80%e8%87%b4%e6%80%a7" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>你可以将此脚本派生出的地址,与上一篇文章通过 GPG 公钥派生的地址进行比对 —— &lt;strong>两者应该完全一致&lt;/strong>.&lt;/p>
-&lt;p>这验证了 GPG 私钥和 Ethereum 私钥的格式兼容性.&lt;/p>
-&lt;hr>
-&lt;h2 class="heading-element" id="应用场景">&lt;span>应用场景&lt;/span>
- &lt;a href="#%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>结合上下两篇文章,可以得出一个清晰结论:&lt;/p>
-&lt;blockquote>
-&lt;p>&lt;strong>YubiKey 中通过 GPG 模式生成的 secp256k1 密钥,可以直接作为以太坊私钥使用.&lt;/strong>&lt;/p>&lt;/blockquote>
-&lt;p>这代表着:&lt;/p>
-&lt;ul>
-&lt;li>使用 YubiKey 生成 GPG 密钥对作为冷钱包&lt;/li>
-&lt;li>通过公钥计算以太坊地址,进行链上收款或身份验证&lt;/li>
-&lt;li>通过 yubikey 恢复地址并参与交易签名&lt;/li>
-&lt;li>使用 YubiKey 签名离线交易,再转到链上广播&lt;/li>
-&lt;/ul>
-&lt;hr>
-&lt;h2 class="heading-element" id="最后">&lt;span>最后&lt;/span>
- &lt;a href="#%e6%9c%80%e5%90%8e" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>利用这一方法,可以验证 YubiKey 中保存的密钥是否对应某个以太坊地址,并以 GPG 格式参与链上签名或身份认证.这为构建一个安全、去信任的冷钱包方案,提供了全新的实现路径.&lt;/p>
-&lt;p>在构建以太坊硬件钱包/冷签名系统/身份验证机制中,YubiKey 与 GPG 将是一个安全/稳定且灵活的基础设施.&lt;/p></description></item><item><title>基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址</title><link>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/</link><pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/</guid><category domain="https://www.lucas6.xyz/categories/hardware-wallet/">Hardware Wallet</category><category domain="https://www.lucas6.xyz/categories/ethereum/">Ethereum</category><category domain="https://www.lucas6.xyz/categories/coldwallet/">Coldwallet</category><description>&lt;p>在区块链的世界中,如何安全保管私钥始终是一个核心问题.YubiKey 作为一款硬件安全密钥,长期被用于 SSH 和 GPG 签名.我们尝试探索一个方向:&lt;/p>
+&lt;p>未来还可考虑集成诈骗地址实时数据库;报警通知系统（如Telegram或钉钉）,进一步提升安全性.&lt;/p></description></item><item><title>基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址</title><link>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/</link><pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/</guid><category domain="https://www.lucas6.xyz/categories/hardware-wallet/">Hardware Wallet</category><category domain="https://www.lucas6.xyz/categories/ethereum/">Ethereum</category><category domain="https://www.lucas6.xyz/categories/coldwallet/">Coldwallet</category><description>&lt;p>在区块链的世界中,如何安全保管私钥始终是一个核心问题.YubiKey 作为一款硬件安全密钥,长期被用于 SSH 和 GPG 签名.我们尝试探索一个方向:&lt;/p>
 &lt;p>&lt;strong>是否可以用 YubiKey 来构建一个离线;不可提取私钥的冷钱包?&lt;/strong>&lt;/p>
 &lt;p>在实际调研中发现,YubiKey 的 OpenPGP 模块支持自定义算法,其中包括 secp256k1.虽然它并非以太坊原生格式的密钥,但通过提取 GPG 公钥中的 EC 点数据(即未压缩公钥),我们仍然可以导出与以太坊地址对应的 Keccak-256 哈希,从而进行地址验证.&lt;/p>
 &lt;p>本文将介绍如何从一个导出的 GPG 公钥(ASCII 格式)中恢复未压缩的 secp256k1 公钥,并转换为对应的以太坊地址.&lt;/p>
@@ -1728,4 +1601,107 @@ GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquo
 &lt;/ol>
 &lt;p>如果确有对应的签名交易,那就可以确定同一个私钥跨链使用,从而对资金流动和交易行为做更深层次的分析.这种方法在安全审计、合规检查、反洗钱以及多链资产研究等场景中都扮演着重要角色,为区块链行业的健康有序发展提供了技术支持.&lt;/p>
 &lt;blockquote>
-&lt;p>&lt;strong>简而言之&lt;/strong>,只要能在以太坊上获取到实际公钥,就可在比特币乃至更多基于 secp256k1 的链上推导相应地址并查验是否存在签名交易.若确认有实际交易且公钥匹配,即可判定由&lt;strong>同一个私钥&lt;/strong>控制.这一跨链验证思路,对于打通区块链生态和深入挖掘跨链资金流向至关重要.&lt;/p>&lt;/blockquote></description></item></channel></rss>
+&lt;p>&lt;strong>简而言之&lt;/strong>,只要能在以太坊上获取到实际公钥,就可在比特币乃至更多基于 secp256k1 的链上推导相应地址并查验是否存在签名交易.若确认有实际交易且公钥匹配,即可判定由&lt;strong>同一个私钥&lt;/strong>控制.这一跨链验证思路,对于打通区块链生态和深入挖掘跨链资金流向至关重要.&lt;/p>&lt;/blockquote></description></item><item><title>Generating Blockchain Private Key</title><link>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</link><pubDate>Wed, 23 Oct 2024 00:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/python/">Python</category><category domain="https://www.lucas6.xyz/categories/security/">Security</category><description>&lt;h2 class="heading-element" id="introduction">&lt;span>Introduction&lt;/span>
+ &lt;a href="#introduction" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>One of the most critical aspects of blockchain technology is cryptographic security，and private key generation is essential for safeguarding users&amp;rsquo; assets．In this post，we will explore how to use Python to generate a 256-bit blockchain private key and convert it into a hexadecimal representation．This simple Python code leverages built-in libraries like &lt;code>os&lt;/code> and &lt;code>functools&lt;/code>，making it easy to understand，especially for beginners．&lt;/p>
+&lt;h2 class="heading-element" id="core-code-for-private-key-generation">&lt;span>Core Code for Private Key Generation&lt;/span>
+ &lt;a href="#core-code-for-private-key-generation" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>The following code demonstrates how to generate a private key consisting of eight 32-bit unsigned integers（256 bits total）and convert it into a hexadecimal string．&lt;/p>
+&lt;h3 class="heading-element" id="code-breakdown">&lt;span>Code Breakdown&lt;/span>
+ &lt;a href="#code-breakdown" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">os&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">functools&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">reduce&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">randomUInt32&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Generate a random 32-bit unsigned integer&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">urandom&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;little&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">signed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">randomUInt32Array&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">count&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">]:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Generate an array containing &amp;#39;count&amp;#39; 32-bit unsigned integers&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">randomUInt32&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">count&lt;/span>&lt;span class="p">)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">key_to_hex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">k&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">])&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Convert the array of 32-bit unsigned integers to a hexadecimal string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">reduce&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="n">k&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">:],&lt;/span> &lt;span class="n">k&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Generate a private key consisting of 8 random 32-bit unsigned integers（256 bits）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">random_key_array&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">randomUInt32Array&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Convert the array of random integers to a hexadecimal private key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">private_key_hex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">key_to_hex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">random_key_array&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Output the generated private key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;Generated Random Key（Private Key）: &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">private_key_hex&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 class="heading-element" id="explanation-of-the-code">&lt;span>Explanation of the Code&lt;/span>
+ &lt;a href="#explanation-of-the-code" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;h3 class="heading-element" id="generating-random-numbers">&lt;span>Generating Random Numbers：&lt;/span>
+ &lt;a href="#generating-random-numbers" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>The &lt;code>randomUInt32&lt;/code> function uses &lt;code>os.urandom(4)&lt;/code> to generate 4 bytes of random data，then converts it into a 32-bit unsigned integer using &lt;code>int.from_bytes&lt;/code>．&lt;/p>
+&lt;h3 class="heading-element" id="generating-an-array-of-private-key-integers">&lt;span>Generating an Array of Private Key Integers：&lt;/span>
+ &lt;a href="#generating-an-array-of-private-key-integers" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>The &lt;code>randomUInt32Array(count)&lt;/code> function creates an array of &lt;code>count&lt;/code> 32-bit unsigned integers．In our case，we generate 8 integers to form a 256-bit key．&lt;/p>
+&lt;h3 class="heading-element" id="converting-to-hexadecimal">&lt;span>Converting to Hexadecimal：&lt;/span>
+ &lt;a href="#converting-to-hexadecimal" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>The &lt;code>key_to_hex(k)&lt;/code> function converts the array of 32-bit integers into a single hexadecimal string，which is the typical format used to represent blockchain private keys．&lt;/p>
+&lt;h3 class="heading-element" id="output-example">&lt;span>Output Example&lt;/span>
+ &lt;a href="#output-example" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>When you run this code，it generates a random 256-bit private key and prints its hexadecimal representation．Example output：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">Generated Random Key（Private Key）: e8b7dfae9f43c9b1781b236e9b91adf5d47c233ffadb78e1a9c16a907b21c3e8&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 class="heading-element" id="conclusion">&lt;span>Conclusion&lt;/span>
+ &lt;a href="#conclusion" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>This Python script demonstrates how to generate a private key for blockchain applications using random numbers and converting it into a hexadecimal format．The use of &lt;code>os.urandom&lt;/code> ensures a high level of randomness，crucial for secure private key generation．&lt;/p>
+&lt;p>The script provides a foundational understanding of how private keys work in blockchain systems．It can be expanded to include public key generation，signing transactions，and other cryptographic functions relevant to blockchain．&lt;/p></description></item></channel></rss>
