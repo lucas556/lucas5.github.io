@@ -4,40 +4,4 @@
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
 &lt;/h2>&lt;p>本文是 &lt;a href="https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/"target="_blank" rel="external nofollow noopener noreferrer">基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址&lt;/a> 的延续.&lt;/p></description></item><item><title>基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址</title><link>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/</link><pubDate>Sun, 27 Jul 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgpub-ethaddress/</guid><category domain="https://www.lucas6.xyz/categories/hardware-wallet/">Hardware Wallet</category><category domain="https://www.lucas6.xyz/categories/ethereum/">Ethereum</category><category domain="https://www.lucas6.xyz/categories/coldwallet/">Coldwallet</category><description>&lt;p>在区块链的世界中,如何安全保管私钥始终是一个核心问题.YubiKey 作为一款硬件安全密钥,长期被用于 SSH 和 GPG 签名.我们尝试探索一个方向:&lt;/p>
-&lt;p>&lt;strong>是否可以用 YubiKey 来构建一个离线;不可提取私钥的冷钱包?&lt;/strong>&lt;/p></description></item><item><title>Rustup安装</title><link>https://www.lucas6.xyz/posts/rustuo-install/</link><pubDate>Sat, 09 Sep 2023 09:29:09 +0800</pubDate><guid>https://www.lucas6.xyz/posts/rustuo-install/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>依赖环境 Rustup 安装:&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">mkdir -p &lt;span class="nv">$HOME&lt;/span>/.cargo
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim $HOME/.cargo/config&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>source.crates-io&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">replace-with &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;ustc&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>source.ustc&lt;span class="o">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">registry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;git://mirrors.ustc.edu.cn/crates.io-index&amp;#34;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;hr>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">curl --proto &lt;span class="s1">&amp;#39;=https&amp;#39;&lt;/span> --tlsv1.2 -sSf https://sh.rustup.rs &lt;span class="p">|&lt;/span> sh
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim ~/.bashrc&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$PATH&lt;/span>:&lt;span class="nv">$HOME&lt;/span>/.cargo/bin&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div></description></item></channel></rss>
+&lt;p>&lt;strong>是否可以用 YubiKey 来构建一个离线;不可提取私钥的冷钱包?&lt;/strong>&lt;/p></description></item></channel></rss>
