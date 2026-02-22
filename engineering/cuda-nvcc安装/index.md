@@ -24,6 +24,6 @@ nvcc --version
 
 ---
 
-> 作者: [](https://www.lucas6.xyz)  
+> 作者:   
 > URL: https://www.lucas6.xyz/engineering/cuda-nvcc%E5%AE%89%E8%A3%85/  
 
