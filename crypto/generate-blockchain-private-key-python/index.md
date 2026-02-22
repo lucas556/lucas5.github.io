@@ -73,7 +73,8 @@ Generated Random Key（Private Key）: e8b7dfae9f43c9b1781b236e9b91adf5d47c233ff
 
 In this article, we explored how to generate a secure 256-bit blockchain private key in Python. Understanding private key generation is fundamental to blockchain security and cryptographic engineering.
 
-You may also like:
+
+## You may also like:
 
 - [从区块链签名中恢复 Secp256k1 公钥(Ethereum 实战)](/crypto/ethereum-signature-recovery/)
 
