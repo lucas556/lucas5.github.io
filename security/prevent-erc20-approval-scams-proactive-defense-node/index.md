@@ -1,6 +1,10 @@
 # Prevent ERC20 Approval Scams: Building a Proactive Ethereum Defense RPC Node With Cloudflare Workers
 
 
+## Abstract
+
+ERC20 approval scams and unlimited token approvals are among the most common causes of wallet asset theft in Ethereum and EVM-compatible chains. This article demonstrates how to build a proactive defense RPC node using Cloudflare Workers to automatically block malicious approval transactions before they are broadcast to the blockchain.
+
 随着区块链应用的普及,欺诈行为日益频繁.据 Chainalysis 报告,2024年加密资产犯罪活动导致损失超过40亿美元,其中因授权类诈骗损失达20%.这类欺诈通常涉及诱导用户签署恶意授权交易,而对于普通用户而言,这类授权功能往往是非必要的.
 
 ## 常见的欺诈类型及典型案例
@@ -9,6 +13,8 @@
 2. **空投诈骗**：虚假的免费代币或NFT空投,引导用户签署无限授权合约,如近期的Blur假空投诈骗导致大量用户资产被窃取.
 3. **虚假挖矿投资**：承诺高额收益,实际骗取用户授权后转移资产,如 "Luna Mining" 诈骗事件.
 4. **DEX授权诈骗**：攻击者在去中心化交易所内误导用户进行无限授权,如 PancakeSwap 假合约事件.
+
+Most ERC20 phishing attacks rely on users signing unlimited approval transactions (`approve(spender, uint256 max)`). Once granted, attackers can drain tokens without further confirmation.
 
 由于普通用户日常使用钱包并不经常涉及需要授权的场景,因此通过设置主动防御节点,能够有效降低此类风险.这种节点会在用户签署交易之后;真正广播到区块链网络之前,自动检查交易内容并过滤掉可能存在危险的授权交易.这种机制不仅适用于以太坊,也适用于其他基于EVM的区块链网络(例如币安智能链 BSC; Polygon; Tron等).
 
@@ -33,6 +39,8 @@
 - 拦截高风险授权函数签名（例如`approve`;`increaseAllowance`;`setApprovalForAll`）.
 - 阻止与黑名单合约地址进行任何交互.
 - 设置资产转移白名单,只允许向信任地址进行转账.
+
+This approach effectively turns your RPC endpoint into a transaction firewall, filtering high-risk function selectors before they reach the Ethereum mempool.
 
 ## Cloudflare Worker详细代码实现
 
@@ -110,12 +118,14 @@ export default {
 
 如果你经常使用去中心化交易所(DEX),直接使用此节点可能导致交易失败,这是因为DEX需要授权函数调用.
 
-建议方案包括：
+## Best Practices for Preventing Approval-Based Attacks
 
-- 将安全且频繁使用的DEX授权合约加入白名单.
-- 对于需要频繁授权的交易,使用单独的钱包,以减少资产风险.
+- Avoid signing unlimited ERC20 approvals whenever possible.
+- Periodically revoke unused token allowances.
+- Use hardware wallets for high-value assets.
+- Consider segregating DeFi wallets from cold storage wallets.
 
-## 总结与扩展建议
+### 总结与扩展建议
 
 通过主动防御节点,我们能有效防范区块链授权类诈骗,保护资产安全.本方案除了以太坊外,同样适用于币安智能链(BSC);Polygon等EVM兼容链,实际使用时只需更换相应RPC地址.
 
