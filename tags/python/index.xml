@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python - 标签 - Lucas's Blog</title><link>https://www.lucas6.xyz/tags/python/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.4.0-alpha-20250721024521-a1cd700b</generator><language>en</language><lastBuildDate>Wed, 27 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://www.lucas6.xyz/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>区块链地址生成实战</title><link>https://www.lucas6.xyz/blockchain/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E5%AE%9E%E6%88%98/</link><pubDate>Wed, 27 Aug 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/blockchain/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E5%AE%9E%E6%88%98/</guid><category domain="https://www.lucas6.xyz/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BC%80%E5%8F%91/">区块链开发</category><description>&lt;blockquote>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python - 标签 - Lucas's Blog</title><link>https://www.lucas6.xyz/tags/python/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.4.2</generator><language>en</language><lastBuildDate>Wed, 27 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://www.lucas6.xyz/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>区块链地址生成实战</title><link>https://www.lucas6.xyz/blockchain/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E5%AE%9E%E6%88%98/</link><pubDate>Wed, 27 Aug 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/blockchain/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E5%AE%9E%E6%88%98/</guid><category domain="https://www.lucas6.xyz/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%BC%80%E5%8F%91/">区块链开发</category><description>&lt;blockquote>
 &lt;p>这篇文章把可运行的 &lt;strong>完整示例代码&lt;/strong> 放在最前面,随后给出&lt;strong>逐步解析&lt;/strong>与 &lt;strong>Q&amp;amp;A&lt;/strong>.拷贝本文代码即可直接生成 ETH 与 Tron 地址,并理解背后的安全细节.&lt;/p>&lt;/blockquote>
 &lt;hr>
 &lt;h2 class="heading-element" id="一完整示例代码可直接运行">&lt;span>一、完整示例代码(可直接运行)&lt;/span>
@@ -9,14 +9,7 @@
  &lt;a href="#%e4%be%9d%e8%b5%96%e5%ae%89%e8%a3%85" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
-&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">pip install coincurve eth_utils base58 pysha3&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
+&lt;/h3>&lt;pre>&lt;code>pip install coincurve eth_utils base58 pysha3&lt;/code>&lt;/pre>&lt;ul>
 &lt;li>&lt;strong>coincurve&lt;/strong>：libsecp256k1 的 Python 封装（负责 secp256k1 椭圆曲线点乘/签名等）&lt;/li>
 &lt;li>&lt;strong>pysha3&lt;/strong>：以太坊使用的 Keccak-256（注意与 FIPS 的 SHA3-256 有细微差别）&lt;/li>
 &lt;li>&lt;strong>eth_utils&lt;/strong>：EIP-55 校验地址&lt;/li>
@@ -26,142 +19,71 @@
  &lt;a href="#%e4%bb%a3%e7%a0%81" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
-&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
-&lt;/span>&lt;span class="lnt">25
-&lt;/span>&lt;span class="lnt">26
-&lt;/span>&lt;span class="lnt">27
-&lt;/span>&lt;span class="lnt">28
-&lt;/span>&lt;span class="lnt">29
-&lt;/span>&lt;span class="lnt">30
-&lt;/span>&lt;span class="lnt">31
-&lt;/span>&lt;span class="lnt">32
-&lt;/span>&lt;span class="lnt">33
-&lt;/span>&lt;span class="lnt">34
-&lt;/span>&lt;span class="lnt">35
-&lt;/span>&lt;span class="lnt">36
-&lt;/span>&lt;span class="lnt">37
-&lt;/span>&lt;span class="lnt">38
-&lt;/span>&lt;span class="lnt">39
-&lt;/span>&lt;span class="lnt">40
-&lt;/span>&lt;span class="lnt">41
-&lt;/span>&lt;span class="lnt">42
-&lt;/span>&lt;span class="lnt">43
-&lt;/span>&lt;span class="lnt">44
-&lt;/span>&lt;span class="lnt">45
-&lt;/span>&lt;span class="lnt">46
-&lt;/span>&lt;span class="lnt">47
-&lt;/span>&lt;span class="lnt">48
-&lt;/span>&lt;span class="lnt">49
-&lt;/span>&lt;span class="lnt">50
-&lt;/span>&lt;span class="lnt">51
-&lt;/span>&lt;span class="lnt">52
-&lt;/span>&lt;span class="lnt">53
-&lt;/span>&lt;span class="lnt">54
-&lt;/span>&lt;span class="lnt">55
-&lt;/span>&lt;span class="lnt">56
-&lt;/span>&lt;span class="lnt">57
-&lt;/span>&lt;span class="lnt">58
-&lt;/span>&lt;span class="lnt">59
-&lt;/span>&lt;span class="lnt">60
-&lt;/span>&lt;span class="lnt">61
-&lt;/span>&lt;span class="lnt">62
-&lt;/span>&lt;span class="lnt">63
-&lt;/span>&lt;span class="lnt">64
-&lt;/span>&lt;span class="lnt">65
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="ch">#!/usr/bin/env python3&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># -*- coding: utf-8 -*-&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">os&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nn">hashlib&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="nn">base58&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">sha3&lt;/span> &lt;span class="c1"># Keccak-256 (pysha3)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">coincurve&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">PublicKey&lt;/span> &lt;span class="c1"># secp256k1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">eth_utils&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">to_checksum_address&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">SECP256K1_N&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">16&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">keccak256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">b&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">k&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sha3&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">keccak_256&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">k&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">b&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">k&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">digest&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Step 1: 生成私钥（CSPRNG + 拒绝采样；不再做额外哈希混合）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">gen_privkey_32&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="kc">True&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">priv&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">urandom&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">32&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">d&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="mi">1&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">d&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">SECP256K1_N&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">priv&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Step 2: 公钥（未压缩 64B 与压缩 33B）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">pubkey64_from_priv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv32&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pub65&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">PublicKey&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_secret&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv32&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">compressed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 65B: 0x04|x|y&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">pub65&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">:]&lt;/span> &lt;span class="c1"># 去掉 0x04 → 64B (x||y)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">pubkey33_from_priv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv32&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">PublicKey&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_secret&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv32&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">format&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">compressed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">True&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 33B: 0x02/0x03|x&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Step 3: 以太坊地址（Keccak → 后 20B → EIP-55 checksum）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">eth_address_from_pub64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">addr20&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">keccak256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">:]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">to_checksum_address&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;0x&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">addr20&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Step 4: Tron 地址（同源 20B → 0x41 → 双 SHA-256 → Base58Check）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">tron_address_from_pub64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">addr20&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">keccak256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">:]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">payload&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">b&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span>&lt;span class="se">\x41&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">addr20&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">checksum&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">hashlib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sha256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">hashlib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sha256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">payload&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">digest&lt;/span>&lt;span class="p">())&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">digest&lt;/span>&lt;span class="p">()[:&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">base58&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">b58encode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">payload&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">checksum&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">decode&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 1) 私钥&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">priv&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">gen_privkey_32&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 2) 公钥（两种形态）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pub64&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pubkey64_from_priv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 64B,用于地址派生&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pub33&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pubkey33_from_priv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">priv&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 33B,备用&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 3) 共同 20B（ETH 与 Tron 的共同核心）&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">core20&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">keccak256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">:]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 4) 生成地址&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">eth_addr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">eth_address_from_pub64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tron_addr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">tron_address_from_pub64&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub64&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># 5) 输出&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;私钥 (hex):&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">priv&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;公钥(64B x||y) hex:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">pub64&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;公钥(33B 压缩) hex:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">pub33&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;共同20B (Keccak(pub64)后20B) hex:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">core20&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;ETH 地址:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">eth_addr&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;TRON 地址:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tron_addr&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;hr>
+&lt;/h3>&lt;pre>&lt;code>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os, hashlib, base58
+import sha3 # Keccak-256 (pysha3)
+from coincurve import PublicKey # secp256k1
+from eth_utils import to_checksum_address
+
+SECP256K1_N = int(&amp;#34;FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141&amp;#34;, 16)
+
+def keccak256(b: bytes) -&amp;gt; bytes:
+ k = sha3.keccak_256()
+ k.update(b)
+ return k.digest()
+
+# Step 1: 生成私钥（CSPRNG &amp;#43; 拒绝采样；不再做额外哈希混合）
+def gen_privkey_32() -&amp;gt; bytes:
+ while True:
+ priv = os.urandom(32)
+ d = int.from_bytes(priv, &amp;#39;big&amp;#39;)
+ if 1 &amp;lt;= d &amp;lt; SECP256K1_N:
+ return priv
+
+# Step 2: 公钥（未压缩 64B 与压缩 33B）
+def pubkey64_from_priv(priv32: bytes) -&amp;gt; bytes:
+ pub65 = PublicKey.from_secret(priv32).format(compressed=False) # 65B: 0x04|x|y
+ return pub65[1:] # 去掉 0x04 → 64B (x||y)
+
+def pubkey33_from_priv(priv32: bytes) -&amp;gt; bytes:
+ return PublicKey.from_secret(priv32).format(compressed=True) # 33B: 0x02/0x03|x
+
+# Step 3: 以太坊地址（Keccak → 后 20B → EIP-55 checksum）
+def eth_address_from_pub64(pub64: bytes) -&amp;gt; str:
+ addr20 = keccak256(pub64)[-20:]
+ return to_checksum_address(&amp;#34;0x&amp;#34; &amp;#43; addr20.hex())
+
+# Step 4: Tron 地址（同源 20B → 0x41 → 双 SHA-256 → Base58Check）
+def tron_address_from_pub64(pub64: bytes) -&amp;gt; str:
+ addr20 = keccak256(pub64)[-20:]
+ payload = b&amp;#39;\x41&amp;#39; &amp;#43; addr20
+ checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]
+ return base58.b58encode(payload &amp;#43; checksum).decode()
+
+if __name__ == &amp;#34;__main__&amp;#34;:
+ # 1) 私钥
+ priv = gen_privkey_32()
+
+ # 2) 公钥（两种形态）
+ pub64 = pubkey64_from_priv(priv) # 64B,用于地址派生
+ pub33 = pubkey33_from_priv(priv) # 33B,备用
+
+ # 3) 共同 20B（ETH 与 Tron 的共同核心）
+ core20 = keccak256(pub64)[-20:]
+
+ # 4) 生成地址
+ eth_addr = eth_address_from_pub64(pub64)
+ tron_addr = tron_address_from_pub64(pub64)
+
+ # 5) 输出
+ print(&amp;#34;私钥 (hex):&amp;#34;, priv.hex())
+ print(&amp;#34;公钥(64B x||y) hex:&amp;#34;, pub64.hex())
+ print(&amp;#34;公钥(33B 压缩) hex:&amp;#34;, pub33.hex())
+ print(&amp;#34;共同20B (Keccak(pub64)后20B) hex:&amp;#34;, core20.hex())
+ print(&amp;#34;ETH 地址:&amp;#34;, eth_addr)
+ print(&amp;#34;TRON 地址:&amp;#34;, tron_addr)&lt;/code>&lt;/pre>&lt;hr>
 &lt;h2 class="heading-element" id="二逐步解析为什么这样写">&lt;span>二、逐步解析(为什么这样写)&lt;/span>
  &lt;a href="#%e4%ba%8c%e9%80%90%e6%ad%a5%e8%a7%a3%e6%9e%90%e4%b8%ba%e4%bb%80%e4%b9%88%e8%bf%99%e6%a0%b7%e5%86%99" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
@@ -181,7 +103,7 @@
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
 &lt;/h4>&lt;p>本文代码已托管：
-📎 &lt;a href="https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py&lt;/a>&lt;/p></description></item><item><title>Generating Blockchain Private Key</title><link>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</link><pubDate>Wed, 23 Oct 2024 00:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/python/">Python</category><category domain="https://www.lucas6.xyz/categories/security/">Security</category><description>&lt;h2 class="heading-element" id="introduction">&lt;span>Introduction&lt;/span>
+📎 &lt;a href="https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py&lt;/a>&lt;/p></description></item><item><title>Generating Blockchain Private Key</title><link>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</link><pubDate>Wed, 23 Oct 2024 00:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/python/">Python</category><category domain="https://www.lucas6.xyz/categories/security/">Security</category><description>&lt;h2 class="heading-element" id="introduction">&lt;span>Introduction&lt;/span>
  &lt;a href="#introduction" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
