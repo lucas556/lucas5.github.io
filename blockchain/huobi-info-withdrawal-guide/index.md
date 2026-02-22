@@ -84,6 +84,6 @@
 
 ---
 
-> 作者: [Lucas](https://www.lucas6.xyz)  
+> 作者: Lucas  
 > URL: https://www.lucas6.xyz/blockchain/huobi-info-withdrawal-guide/  
 

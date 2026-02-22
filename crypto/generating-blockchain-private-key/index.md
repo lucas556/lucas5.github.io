@@ -70,6 +70,6 @@ The script provides a foundational understanding of how private keys work in blo
 
 ---
 
-> 作者: [Lucas](https://www.lucas6.xyz)  
+> 作者: [](https://www.lucas6.xyz)  
 > URL: https://www.lucas6.xyz/crypto/generating-blockchain-private-key/  
 

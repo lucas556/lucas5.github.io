@@ -105,6 +105,6 @@ Recovered Public Key (hex): 04a3f5d0c72ae1955bbf61a69b276bda7e3a7dcff4790d85e3c1
 
 ---
 
-> 作者: [Lucas](https://www.lucas6.xyz)  
+> 作者: Lucas  
 > URL: https://www.lucas6.xyz/crypto/%E4%BB%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E7%AD%BE%E5%90%8D%E4%B8%AD%E6%81%A2%E5%A4%8D-secp256k1-%E5%85%AC%E9%92%A5ethereum-%E5%AE%9E%E6%88%98/  
 
