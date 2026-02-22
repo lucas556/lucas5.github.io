@@ -1,4 +1,4 @@
-# Generating Blockchain Private Key
+# How to Generate a 256-Bit Blockchain Private Key in Python
 
 
 ## Introduction
@@ -71,5 +71,5 @@ The script provides a foundational understanding of how private keys work in blo
 ---
 
 > 作者: <no value>  
-> URL: https://www.lucas6.xyz/crypto/generating-blockchain-private-key/  
+> URL: https://www.lucas6.xyz/crypto/generate-blockchain-private-key-python/  
 
