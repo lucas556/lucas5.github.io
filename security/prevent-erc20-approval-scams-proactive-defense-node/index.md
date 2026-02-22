@@ -121,6 +121,12 @@ export default {
 
 未来还可考虑集成诈骗地址实时数据库;报警通知系统（如Telegram或钉钉）,进一步提升安全性.
 
+## Related Articles
+
+- [How Ethereum Public Key Recovery Works](/crypto/ethereum-signature-recovery/)
+- [Generating Secure 256-bit Blockchain Private Keys](/crypto/generate-blockchain-private-key-python/)
+- [Cross-Chain Public Key Tracing Explained](/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/)
+
 
 ---
 
