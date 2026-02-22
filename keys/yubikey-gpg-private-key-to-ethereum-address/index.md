@@ -1,4 +1,4 @@
-# 基于 YubiKey 的冷钱包探索 2：使用 GPG 私钥生成以太坊地址
+# YubiKey 冷钱包实战（二）：如何将 GPG 私钥转换为以太坊地址(secp256k1 深度解析)
 
 
 ## 背景与前文回顾
@@ -107,5 +107,5 @@ print("Ethereum 地址:", eth_address)
 ---
 
 > 作者: <no value>  
-> URL: https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A2-2%E4%BD%BF%E7%94%A8-gpg-%E7%A7%81%E9%92%A5%E7%94%9F%E6%88%90%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/  
+> URL: https://www.lucas6.xyz/keys/yubikey-gpg-private-key-to-ethereum-address/  
 
