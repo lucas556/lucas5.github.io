@@ -3,6 +3,10 @@
 
 随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个**普适的技术思路**：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.
 
+## Abstract
+
+This article explains how to recover public keys from Ethereum transactions using the ECDSA signature fields (v, r, s) and trace potential cross-chain activity on Bitcoin. By leveraging secp256k1 compatibility, we demonstrate how public key recovery enables cross-chain cryptographic verification.
+
 ---
 
 ## 1. 从以太坊交易中获取公钥
@@ -16,6 +20,8 @@
   - `r`、`s`：签名的核心数据,分别对应椭圆曲线的 x 坐标部分  
 - **公钥恢复**  
   - `ecrecover(msgHash, v, r, s)` → **非压缩公钥**（65 字节,前缀 `0x04` + X/Y 坐标）
+
+This process is commonly referred to as **ECDSA public key recovery**, and is possible because Ethereum exposes signature parameters directly in transaction data.
 
 ### 1.2 技术流程
 
@@ -65,6 +71,8 @@ checksum = SHA256(SHA256(payload))[:4]
 address_bytes = payload + checksum
 btc_address = Base58CheckEncode(address_bytes)  # 形如 1xxxx...
 ```
+
+Because both Ethereum and Bitcoin use the secp256k1 elliptic curve, the same public key can theoretically generate valid addresses across both networks.
 
 ### 2.2 在比特币链上验证实际交易
 
@@ -125,6 +133,12 @@ btc_address = Base58CheckEncode(address_bytes)  # 形如 1xxxx...
 如果确有对应的签名交易,那就可以确定同一个私钥跨链使用,从而对资金流动和交易行为做更深层次的分析.这种方法在安全审计、合规检查、反洗钱以及多链资产研究等场景中都扮演着重要角色,为区块链行业的健康有序发展提供了技术支持.
 
 > **简而言之**,只要能在以太坊上获取到实际公钥,就可在比特币乃至更多基于 secp256k1 的链上推导相应地址并查验是否存在签名交易.若确认有实际交易且公钥匹配,即可判定由**同一个私钥**控制.这一跨链验证思路,对于打通区块链生态和深入挖掘跨链资金流向至关重要.
+
+## Related Articles
+
+- [How Ethereum Signature Recovery Works](/crypto/ethereum-signature-recovery/)
+- [Understanding secp256k1 in Blockchain Systems](/crypto/secp256k1-explained/)
+- [Generating Secure Blockchain Private Keys in Python](/crypto/generate-blockchain-private-key-python/)
 
 
 ---
