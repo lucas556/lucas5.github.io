@@ -124,6 +124,6 @@ export default {
 
 ---
 
-> 作者:   
+> 作者: [Lucas](https://www.lucas6.xyz)  
 > URL: https://www.lucas6.xyz/blockchain/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%89%E5%85%A8%E6%9E%84%E5%BB%BA%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1%E8%8A%82%E7%82%B9%E9%98%BB%E6%AD%A2%E9%92%B1%E5%8C%85%E6%AC%BA%E8%AF%88%E4%BA%A4%E6%98%93/  
 

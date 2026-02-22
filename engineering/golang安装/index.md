@@ -15,6 +15,6 @@ source ~/.bashrc
 
 ---
 
-> 作者:   
+> 作者: [Lucas](https://www.lucas6.xyz)  
 > URL: https://www.lucas6.xyz/engineering/golang%E5%AE%89%E8%A3%85/  
 

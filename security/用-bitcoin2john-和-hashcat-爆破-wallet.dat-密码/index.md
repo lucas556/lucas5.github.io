@@ -106,6 +106,6 @@ $bitcoin$... : myoldpass2020
 
 ---
 
-> 作者: Lucas  
+> 作者: [Lucas](https://www.lucas6.xyz)  
 > URL: https://www.lucas6.xyz/security/%E7%94%A8-bitcoin2john-%E5%92%8C-hashcat-%E7%88%86%E7%A0%B4-wallet.dat-%E5%AF%86%E7%A0%81/  
 
