@@ -1,29 +1,87 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Environment - 分类 - Lucas's Blog</title><link>https://www.lucas6.xyz/categories/environment/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.4.2</generator><language>en</language><lastBuildDate>Sat, 09 Sep 2023 09:29:09 +0800</lastBuildDate><atom:link href="https://www.lucas6.xyz/categories/environment/index.xml" rel="self" type="application/rss+xml"/><item><title>Rustup安装</title><link>https://www.lucas6.xyz/engineering/rustup%E5%AE%89%E8%A3%85/</link><pubDate>Sat, 09 Sep 2023 09:29:09 +0800</pubDate><guid>https://www.lucas6.xyz/engineering/rustup%E5%AE%89%E8%A3%85/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>依赖环境 Rustup 安装:&lt;/p>
-&lt;pre>&lt;code>mkdir -p $HOME/.cargo
-# vim $HOME/.cargo/config
-
-[source.crates-io]
-replace-with = &amp;#39;ustc&amp;#39;
-
-[source.ustc]
-registry = &amp;#34;git://mirrors.ustc.edu.cn/crates.io-index&amp;#34;&lt;/code>&lt;/pre>&lt;hr>
-&lt;pre>&lt;code>curl --proto &amp;#39;=https&amp;#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
-# vim ~/.bashrc
-export PATH=$PATH:$HOME/.cargo/bin&lt;/code>&lt;/pre></description></item><item><title>Golang安装</title><link>https://www.lucas6.xyz/engineering/golang%E5%AE%89%E8%A3%85/</link><pubDate>Sat, 09 Sep 2023 09:19:09 +0800</pubDate><guid>https://www.lucas6.xyz/engineering/golang%E5%AE%89%E8%A3%85/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>依赖环境 Golang 安装(1.16.4):&lt;/p>
-&lt;pre>&lt;code>wget -c https://studygolang.com/dl/golang/go1.16.4.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
-
-# vim ~/.bashrc
-export PATH=$PATH:/usr/local/go/bin
-export GOPROXY=https://goproxy.cn
-source ~/.bashrc&lt;/code>&lt;/pre></description></item><item><title>CUDA NVCC安装</title><link>https://www.lucas6.xyz/engineering/cuda-nvcc%E5%AE%89%E8%A3%85/</link><pubDate>Sat, 09 Sep 2023 09:09:09 +0800</pubDate><guid>https://www.lucas6.xyz/engineering/cuda-nvcc%E5%AE%89%E8%A3%85/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>CUDA运算需要安装NVCC&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Environment - 分类 - Lucas's Blog</title><link>https://www.lucas6.xyz/categories/environment/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.3.20</generator><language>en</language><lastBuildDate>Sat, 09 Sep 2023 09:29:09 +0800</lastBuildDate><atom:link href="https://www.lucas6.xyz/categories/environment/index.xml" rel="self" type="application/rss+xml"/><item><title>Rustup安装</title><link>https://www.lucas6.xyz/engineering/rustup%E5%AE%89%E8%A3%85/</link><pubDate>Sat, 09 Sep 2023 09:29:09 +0800</pubDate><guid>https://www.lucas6.xyz/engineering/rustup%E5%AE%89%E8%A3%85/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>依赖环境 Rustup 安装:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">mkdir -p &lt;span class="nv">$HOME&lt;/span>/.cargo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim $HOME/.cargo/config&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>source.crates-io&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">replace-with &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;ustc&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>source.ustc&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">registry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;git://mirrors.ustc.edu.cn/crates.io-index&amp;#34;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">curl --proto &lt;span class="s1">&amp;#39;=https&amp;#39;&lt;/span> --tlsv1.2 -sSf https://sh.rustup.rs &lt;span class="p">|&lt;/span> sh
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim ~/.bashrc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$PATH&lt;/span>:&lt;span class="nv">$HOME&lt;/span>/.cargo/bin&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Golang安装</title><link>https://www.lucas6.xyz/engineering/golang%E5%AE%89%E8%A3%85/</link><pubDate>Sat, 09 Sep 2023 09:19:09 +0800</pubDate><guid>https://www.lucas6.xyz/engineering/golang%E5%AE%89%E8%A3%85/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>依赖环境 Golang 安装(1.16.4):&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">wget -c https://studygolang.com/dl/golang/go1.16.4.linux-amd64.tar.gz -O - &lt;span class="p">|&lt;/span> sudo tar -xz -C /usr/local
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim ~/.bashrc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$PATH&lt;/span>:/usr/local/go/bin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">GOPROXY&lt;/span>&lt;span class="o">=&lt;/span>https://goproxy.cn
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">source&lt;/span> ~/.bashrc&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>CUDA NVCC安装</title><link>https://www.lucas6.xyz/engineering/cuda-nvcc%E5%AE%89%E8%A3%85/</link><pubDate>Sat, 09 Sep 2023 09:09:09 +0800</pubDate><guid>https://www.lucas6.xyz/engineering/cuda-nvcc%E5%AE%89%E8%A3%85/</guid><category domain="https://www.lucas6.xyz/categories/environment/">Environment</category><description>&lt;p>CUDA运算需要安装NVCC&lt;/p>
 &lt;p>安装cuda-toolkit-11-2(ubuntu18.04):&lt;/p>
-&lt;pre>&lt;code>wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run
-sudo sh cuda_11.2.2_460.32.03_linux.run&lt;/code>&lt;/pre>&lt;pre>&lt;code># set PATH
-# vim ~/.bashrc
-export PATH=$PATH:/usr/local/cuda-11.2/bin
-export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64
-export CUDA_HOME=/usr/local/cuda
-
-source ~/.bashrc
-nvcc --version&lt;/code>&lt;/pre></description></item></channel></rss>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo sh cuda_11.2.2_460.32.03_linux.run&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># set PATH&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># vim ~/.bashrc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">$PATH&lt;/span>:/usr/local/cuda-11.2/bin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">LD_LIBRARY_PATH&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/cuda-11.2/lib64
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">CUDA_HOME&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/cuda
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">source&lt;/span> ~/.bashrc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">nvcc --version&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

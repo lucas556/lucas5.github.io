@@ -50,6 +50,6 @@ The theme in use is [FixIt](https://github.com/hugo-fixit/FixIt), which is licen
 
 ---
 
-> 作者: [Lucas](https://www.lucas6.xyz)  
+> 作者: <no value>  
 > URL: https://www.lucas6.xyz/copyright/  
 

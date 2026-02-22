@@ -53,6 +53,6 @@ If you share an interest in fundamental cryptographic technologies, you’re wel
 
 ---
 
-> 作者: [Lucas](https://www.lucas6.xyz)  
+> 作者: <no value>  
 > URL: https://www.lucas6.xyz/about/  
 
