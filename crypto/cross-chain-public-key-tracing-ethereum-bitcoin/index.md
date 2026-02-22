@@ -137,7 +137,6 @@ Because both Ethereum and Bitcoin use the secp256k1 elliptic curve, the same pub
 ## Related Articles
 
 - [How Ethereum Signature Recovery Works](/crypto/ethereum-signature-recovery/)
-- [Understanding secp256k1 in Blockchain Systems](/crypto/secp256k1-explained/)
 - [Generating Secure Blockchain Private Keys in Python](/crypto/generate-blockchain-private-key-python/)
 
 
