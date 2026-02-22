@@ -212,6 +212,6 @@ A: 技术上直接使用 PRF(salt) 的 32 字节作为 AES-256 密钥是可行�
 
 ---
 
-> 作者: Lucas  
+> 作者: <no value>  
 > URL: https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A23%E4%BD%BF%E7%94%A8-fido2-%E6%B4%BE%E7%94%9F-kek-%E5%8A%A0%E5%AF%86%E7%A7%81%E9%92%A5%E5%B9%B6%E7%AE%A1%E7%90%86%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/  
 

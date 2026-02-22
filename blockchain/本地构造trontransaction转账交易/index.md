@@ -87,6 +87,6 @@ if not decoded.hex().startswith("41"):
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: https://www.lucas6.xyz/blockchain/%E6%9C%AC%E5%9C%B0%E6%9E%84%E9%80%A0trontransaction%E8%BD%AC%E8%B4%A6%E4%BA%A4%E6%98%93/  
 

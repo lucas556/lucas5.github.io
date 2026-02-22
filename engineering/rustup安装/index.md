@@ -25,6 +25,6 @@ export PATH=$PATH:$HOME/.cargo/bin
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: https://www.lucas6.xyz/engineering/rustup%E5%AE%89%E8%A3%85/  
 
