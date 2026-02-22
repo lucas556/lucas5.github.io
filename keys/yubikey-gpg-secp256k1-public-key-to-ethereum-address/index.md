@@ -1,4 +1,4 @@
-# 基于 YubiKey 的冷钱包探索:使用 GPG 公钥生成以太坊地址
+# YubiKey 冷钱包实战（一）：如何使用 GPG Secp256k1 公钥生成以太坊地址
 
 在区块链的世界中,如何安全保管私钥始终是一个核心问题.YubiKey 作为一款硬件安全密钥,长期被用于 SSH 和 GPG 签名.我们尝试探索一个方向:
 
@@ -112,5 +112,5 @@ print("Ethereum address:", eth_address)
 ---
 
 > 作者: <no value>  
-> URL: https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A2%E4%BD%BF%E7%94%A8-gpg-%E5%85%AC%E9%92%A5%E7%94%9F%E6%88%90%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/  
+> URL: https://www.lucas6.xyz/keys/yubikey-gpg-secp256k1-public-key-to-ethereum-address/  
 
