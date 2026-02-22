@@ -175,4 +175,4 @@
 &lt;li>多次 &lt;code>os.urandom(8)&lt;/code> 并不会“更安全”,只是多了几次系统调用.&lt;/li>
 &lt;li>只有在&lt;strong>合并不同熵源&lt;/strong>(例如硬件 RNG + OS RNG)时,才考虑拼接后做一次哈希白化.&lt;/li>
 &lt;/ul>
-&lt;p>&lt;strong>对比代码：&lt;/strong>&lt;/p></description></item></channel></rss>
+&lt;p>&lt;strong>对比代码：&lt;/strong>&lt;/p></description></item><item><title>本地构造TronTransaction转账交易</title><link>https://www.lucas6.xyz/blockchain/%E6%9C%AC%E5%9C%B0%E6%9E%84%E9%80%A0trontransaction%E8%BD%AC%E8%B4%A6%E4%BA%A4%E6%98%93/</link><pubDate>Fri, 25 Jul 2025 22:30:00 +0800</pubDate><guid>https://www.lucas6.xyz/blockchain/%E6%9C%AC%E5%9C%B0%E6%9E%84%E9%80%A0trontransaction%E8%BD%AC%E8%B4%A6%E4%BA%A4%E6%98%93/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/tron/">TRON</category><category domain="https://www.lucas6.xyz/categories/python/">Python</category><description>&lt;p>在实际开发中,某些场景要求我们对交易过程具备更高的可控性与安全性.比如在硬件钱包中使用私钥签名,或在冷隔离环境下进行离线交易构造时,必须避免依赖 TRON 节点的 &lt;code>createtransaction&lt;/code> 接口.这就需要我们&lt;strong>在本地构造交易结构、手动填入区块数据并完成签名&lt;/strong>,再广播至主网.&lt;/p></description></item></channel></rss>
