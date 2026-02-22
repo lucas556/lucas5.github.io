@@ -103,6 +103,13 @@ print("Ethereum 地址:", eth_address)
 
 在构建以太坊硬件钱包/冷签名系统/身份验证机制中,YubiKey 与 GPG 将是一个安全/稳定且灵活的基础设施.
 
+## 相关文章
+
+- 基于 YubiKey 的冷钱包探索
+- 使用 GPG 公钥生成以太坊地址
+- Ethereum 地址生成实战
+- OpenPGP 与 secp256k1 兼容性分析
+
 
 ---
 
