@@ -870,191 +870,6 @@ A：完全可以.&lt;code>coincurve&lt;/code> 本质是对 libsecp256k1 的 Pyth
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
 &lt;/h2>&lt;p>通过主动防御节点,我们能有效防范区块链授权类诈骗,保护资产安全.本方案除了以太坊外,同样适用于币安智能链(BSC);Polygon等EVM兼容链,实际使用时只需更换相应RPC地址.&lt;/p>
-&lt;p>未来还可考虑集成诈骗地址实时数据库;报警通知系统（如Telegram或钉钉）,进一步提升安全性.&lt;/p></description></item><item><title>区块链安全:构建主动防御节点阻止钱包欺诈交易</title><link>https://www.lucas6.xyz/posts/building-safety-nodes/</link><pubDate>Sun, 03 Aug 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/building-safety-nodes/</guid><description>&lt;p>随着区块链应用的普及,欺诈行为日益频繁.据 Chainalysis 报告,2024年加密资产犯罪活动导致损失超过40亿美元,其中因授权类诈骗损失达20%.这类欺诈通常涉及诱导用户签署恶意授权交易,而对于普通用户而言,这类授权功能往往是非必要的.&lt;/p>
-&lt;h2 class="heading-element" id="常见的欺诈类型及典型案例">&lt;span>常见的欺诈类型及典型案例&lt;/span>
- &lt;a href="#%e5%b8%b8%e8%a7%81%e7%9a%84%e6%ac%ba%e8%af%88%e7%b1%bb%e5%9e%8b%e5%8f%8a%e5%85%b8%e5%9e%8b%e6%a1%88%e4%be%8b" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;ol>
-&lt;li>&lt;strong>钓鱼网站诈骗&lt;/strong>：攻击者伪装成知名项目或钱包的官网,引诱用户进行无限授权.如著名的MetaMask假网站案件,数百万美元资产因此被盗.&lt;/li>
-&lt;li>&lt;strong>空投诈骗&lt;/strong>：虚假的免费代币或NFT空投,引导用户签署无限授权合约,如近期的Blur假空投诈骗导致大量用户资产被窃取.&lt;/li>
-&lt;li>&lt;strong>虚假挖矿投资&lt;/strong>：承诺高额收益,实际骗取用户授权后转移资产,如 &amp;ldquo;Luna Mining&amp;rdquo; 诈骗事件.&lt;/li>
-&lt;li>&lt;strong>DEX授权诈骗&lt;/strong>：攻击者在去中心化交易所内误导用户进行无限授权,如 PancakeSwap 假合约事件.&lt;/li>
-&lt;/ol>
-&lt;p>由于普通用户日常使用钱包并不经常涉及需要授权的场景,因此通过设置主动防御节点,能够有效降低此类风险.这种节点会在用户签署交易之后;真正广播到区块链网络之前,自动检查交易内容并过滤掉可能存在危险的授权交易.这种机制不仅适用于以太坊,也适用于其他基于EVM的区块链网络(例如币安智能链 BSC; Polygon; Tron等).&lt;/p>
-&lt;h2 class="heading-element" id="如何有效预防">&lt;span>如何有效预防&lt;/span>
- &lt;a href="#%e5%a6%82%e4%bd%95%e6%9c%89%e6%95%88%e9%a2%84%e9%98%b2" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;ul>
-&lt;li>谨慎访问未知链接,避免轻易授权.&lt;/li>
-&lt;li>签署钱包交易前仔细核对合约地址与交易详情.&lt;/li>
-&lt;li>使用主动防御节点或自定义安全节点对所有交易进行自动检查.&lt;/li>
-&lt;li>定期审查钱包授权状态,撤销不必要的授权.&lt;/li>
-&lt;/ul>
-&lt;h2 class="heading-element" id="技术实现原理与操作细节">&lt;span>技术实现原理与操作细节&lt;/span>
- &lt;a href="#%e6%8a%80%e6%9c%af%e5%ae%9e%e7%8e%b0%e5%8e%9f%e7%90%86%e4%b8%8e%e6%93%8d%e4%bd%9c%e7%bb%86%e8%8a%82" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>为了防范上述欺诈风险,本文采用 &lt;strong>Cloudflare Worker&lt;/strong> 与 &lt;strong>Infura&lt;/strong> 搭建主动防御节点，对高风险授权交易进行拦截。该节点作为交易检查中继，工作流程如下：&lt;/p>
-&lt;ol>
-&lt;li>用户在钱包中签署交易后,交易首先发送至 Cloudflare Worker 进行安全检查&lt;/li>
-&lt;li>只有通过检查的交易,才会被转发至以太坊主网节点(例如 Infura)进行广播&lt;/li>
-&lt;/ol>
-&lt;p>此外,由于 Cloudflare Worker 部署在边缘网络,还能有效隐藏用户真实 IP,从而增强隐私保护.&lt;/p>
-&lt;p>具体拦截规则包括:&lt;/p>
-&lt;ul>
-&lt;li>拦截高风险授权函数签名（例如&lt;code>approve&lt;/code>;&lt;code>increaseAllowance&lt;/code>;&lt;code>setApprovalForAll&lt;/code>）.&lt;/li>
-&lt;li>阻止与黑名单合约地址进行任何交互.&lt;/li>
-&lt;li>设置资产转移白名单,只允许向信任地址进行转账.&lt;/li>
-&lt;/ul>
-&lt;h2 class="heading-element" id="cloudflare-worker详细代码实现">&lt;span>Cloudflare Worker详细代码实现&lt;/span>
- &lt;a href="#cloudflare-worker%e8%af%a6%e7%bb%86%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
-&lt;/span>&lt;span class="lnt">25
-&lt;/span>&lt;span class="lnt">26
-&lt;/span>&lt;span class="lnt">27
-&lt;/span>&lt;span class="lnt">28
-&lt;/span>&lt;span class="lnt">29
-&lt;/span>&lt;span class="lnt">30
-&lt;/span>&lt;span class="lnt">31
-&lt;/span>&lt;span class="lnt">32
-&lt;/span>&lt;span class="lnt">33
-&lt;/span>&lt;span class="lnt">34
-&lt;/span>&lt;span class="lnt">35
-&lt;/span>&lt;span class="lnt">36
-&lt;/span>&lt;span class="lnt">37
-&lt;/span>&lt;span class="lnt">38
-&lt;/span>&lt;span class="lnt">39
-&lt;/span>&lt;span class="lnt">40
-&lt;/span>&lt;span class="lnt">41
-&lt;/span>&lt;span class="lnt">42
-&lt;/span>&lt;span class="lnt">43
-&lt;/span>&lt;span class="lnt">44
-&lt;/span>&lt;span class="lnt">45
-&lt;/span>&lt;span class="lnt">46
-&lt;/span>&lt;span class="lnt">47
-&lt;/span>&lt;span class="lnt">48
-&lt;/span>&lt;span class="lnt">49
-&lt;/span>&lt;span class="lnt">50
-&lt;/span>&lt;span class="lnt">51
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 此代码未经测试;实际部署中需要测试
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">BLOCKED_SELECTORS&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;0x095ea7b3&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// approve
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="s1">&amp;#39;0x39509351&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// increaseAllowance
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="s1">&amp;#39;0xa22cb465&amp;#39;&lt;/span> &lt;span class="c1">// setApprovalForAll
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">];&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">BLACKLIST_CONTRACTS&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Set&lt;/span>&lt;span class="p">([&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;0xdeaddeaddeaddeaddeaddeaddeaddeaddeadbeef&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;0x1234567890abcdef1234567890abcdef12345678&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">]);&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">ENABLE_WHITELIST&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">WHITELIST_RECIPIENTS&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Set&lt;/span>&lt;span class="p">([&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&amp;#39;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">]);&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">async&lt;/span> &lt;span class="nx">fetch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">request&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">request&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">method&lt;/span> &lt;span class="o">!==&lt;/span> &lt;span class="s1">&amp;#39;POST&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Response&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;Only POST allowed&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">status&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">405&lt;/span> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">body&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kr">await&lt;/span> &lt;span class="nx">request&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">json&lt;/span>&lt;span class="p">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">tx&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">body&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">params&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">.[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">];&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">to&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">tx&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">to&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">toLowerCase&lt;/span>&lt;span class="p">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">data&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">tx&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">toLowerCase&lt;/span>&lt;span class="p">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">data&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nx">BLOCKED_SELECTORS&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">some&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">sig&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">data&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">startsWith&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">sig&lt;/span>&lt;span class="p">)))&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Response&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">error&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;已拦截危险授权交易&amp;#39;&lt;/span> &lt;span class="p">}),&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">status&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">403&lt;/span> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">to&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nx">BLACKLIST_CONTRACTS&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">has&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">to&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Response&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">error&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;目标地址属于黑名单合约&amp;#39;&lt;/span> &lt;span class="p">}),&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">status&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">403&lt;/span> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">ENABLE_WHITELIST&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nx">to&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="o">!&lt;/span>&lt;span class="nx">WHITELIST_RECIPIENTS&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">has&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">to&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">Response&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">error&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;非白名单地址禁止转账&amp;#39;&lt;/span> &lt;span class="p">}),&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">status&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">403&lt;/span> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">response&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kr">await&lt;/span> &lt;span class="nx">fetch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">method&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;POST&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">headers&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="s1">&amp;#39;Content-Type&amp;#39;&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;application/json&amp;#39;&lt;/span> &lt;span class="p">},&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">body&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">stringify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">body&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">response&lt;/span>&lt;span class="p">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 class="heading-element" id="具体部署操作步骤">&lt;span>具体部署操作步骤&lt;/span>
- &lt;a href="#%e5%85%b7%e4%bd%93%e9%83%a8%e7%bd%b2%e6%93%8d%e4%bd%9c%e6%ad%a5%e9%aa%a4" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;ol>
-&lt;li>登录&lt;a href="https://workers.cloudflare.com/"target="_blank" rel="external nofollow noopener noreferrer">Cloudflare Workers&lt;/a>后台.&lt;/li>
-&lt;li>创建新的Worker,复制上述代码到编辑器中.&lt;/li>
-&lt;li>替换代码中的&lt;code>YOUR_INFURA_PROJECT_ID&lt;/code>为你个人的Infura项目ID.&lt;/li>
-&lt;li>点击&amp;quot;保存并部署&amp;quot;,获得Worker节点URL,如 &lt;code>https://your-worker.workers.dev&lt;/code>.&lt;/li>
-&lt;/ol>
-&lt;h2 class="heading-element" id="钱包配置实例参考">&lt;span>钱包配置实例参考&lt;/span>
- &lt;a href="#%e9%92%b1%e5%8c%85%e9%85%8d%e7%bd%ae%e5%ae%9e%e4%be%8b%e5%8f%82%e8%80%83" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;ul>
-&lt;li>进入钱包设置 &amp;ndash;&amp;gt; 网络 &amp;ndash;&amp;gt; 添加新网络.&lt;/li>
-&lt;li>网络名称填入&amp;quot;主动防御节点&amp;quot;.&lt;/li>
-&lt;li>RPC URL 填入上述 Worker URL.&lt;/li>
-&lt;li>Chain ID填写为1,符号ETH.(有些钱包只需要填写prc地址)&lt;/li>
-&lt;/ul>
-&lt;p>设置后,钱包发出的交易都会先经过此节点检查再上链.&lt;/p>
-&lt;h2 class="heading-element" id="实际使用注意事项">&lt;span>实际使用注意事项&lt;/span>
- &lt;a href="#%e5%ae%9e%e9%99%85%e4%bd%bf%e7%94%a8%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>如果你经常使用去中心化交易所(DEX),直接使用此节点可能导致交易失败,这是因为DEX需要授权函数调用.&lt;/p>
-&lt;p>建议方案包括：&lt;/p>
-&lt;ul>
-&lt;li>将安全且频繁使用的DEX授权合约加入白名单.&lt;/li>
-&lt;li>对于需要频繁授权的交易,使用单独的钱包,以减少资产风险.&lt;/li>
-&lt;/ul>
-&lt;h2 class="heading-element" id="总结与扩展建议">&lt;span>总结与扩展建议&lt;/span>
- &lt;a href="#%e6%80%bb%e7%bb%93%e4%b8%8e%e6%89%a9%e5%b1%95%e5%bb%ba%e8%ae%ae" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>通过主动防御节点,我们能有效防范区块链授权类诈骗,保护资产安全.本方案除了以太坊外,同样适用于币安智能链(BSC);Polygon等EVM兼容链,实际使用时只需更换相应RPC地址.&lt;/p>
 &lt;p>未来还可考虑集成诈骗地址实时数据库;报警通知系统（如Telegram或钉钉）,进一步提升安全性.&lt;/p></description></item><item><title>基于 YubiKey 的冷钱包探索 2：使用 GPG 私钥生成以太坊地址</title><link>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgkey-ethaddress/</link><pubDate>Mon, 28 Jul 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/posts/yubikey-coldwallet-gpgkey-ethaddress/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/security/">Security</category><category domain="https://www.lucas6.xyz/categories/coldwallet/">Coldwallet</category><description>&lt;h2 class="heading-element" id="背景与前文回顾">&lt;span>背景与前文回顾&lt;/span>
  &lt;a href="#%e8%83%8c%e6%99%af%e4%b8%8e%e5%89%8d%e6%96%87%e5%9b%9e%e9%a1%be" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
@@ -1729,4 +1544,188 @@ GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquo
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> v = 1
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Recovered Public Key (hex): 04a3f5d0c72ae1955bbf61a69b276bda7e3a7dcff4790d85e3c166e2c99f3b37d3d5f31a7e8876e37e63c6d2dfd4717e7e8c5f8c99b624d6c1441188ac11bca5ed&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>该公钥为未压缩格式,长度为 130 个 hex 字符 (65 字节),前缀 &lt;code>04&lt;/code> 表示未压缩格式.&lt;/p></description></item></channel></rss>
+&lt;/div>&lt;p>该公钥为未压缩格式,长度为 130 个 hex 字符 (65 字节),前缀 &lt;code>04&lt;/code> 表示未压缩格式.&lt;/p></description></item><item><title>基于区块链交易公钥在多链进行跨链追查: 原理与实践</title><link>https://www.lucas6.xyz/crypto/%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E4%BA%A4%E6%98%93%E5%85%AC%E9%92%A5%E5%9C%A8%E5%A4%9A%E9%93%BE%E8%BF%9B%E8%A1%8C%E8%B7%A8%E9%93%BE%E8%BF%BD%E6%9F%A5-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</link><pubDate>Fri, 28 Feb 2025 01:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E4%BA%A4%E6%98%93%E5%85%AC%E9%92%A5%E5%9C%A8%E5%A4%9A%E9%93%BE%E8%BF%9B%E8%A1%8C%E8%B7%A8%E9%93%BE%E8%BF%BD%E6%9F%A5-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</guid><category domain="https://www.lucas6.xyz/categories/blockchain/">Blockchain</category><category domain="https://www.lucas6.xyz/categories/multi-chain/">Multi-Chain</category><category domain="https://www.lucas6.xyz/categories/security/">Security</category><description>&lt;p>随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个&lt;strong>普适的技术思路&lt;/strong>：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="1-从以太坊交易中获取公钥">&lt;span>1. 从以太坊交易中获取公钥&lt;/span>
+ &lt;a href="#1-%e4%bb%8e%e4%bb%a5%e5%a4%aa%e5%9d%8a%e4%ba%a4%e6%98%93%e4%b8%ad%e8%8e%b7%e5%8f%96%e5%85%ac%e9%92%a5" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;h3 class="heading-element" id="11-为什么能获取公钥">&lt;span>1.1 为什么能获取公钥？&lt;/span>
+ &lt;a href="#11-%e4%b8%ba%e4%bb%80%e4%b9%88%e8%83%bd%e8%8e%b7%e5%8f%96%e5%85%ac%e9%92%a5" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>在以太坊中,每一笔交易都会包含签名字段 &lt;code>(v, r, s)&lt;/code>,以及待签名消息的哈希（通常是交易哈希或更底层的 RLP 编码哈希）.以太坊提供了名为 &lt;code>ecrecover&lt;/code> 的机制,能从 &lt;code>(v, r, s)&lt;/code> 与消息哈希中&lt;strong>恢复&lt;/strong>出用于签名的完整公钥.&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>签名字段&lt;/strong>
+&lt;ul>
+&lt;li>&lt;code>v&lt;/code>：恢复标记（包含链 ID 信息或椭圆曲线恢复信息）&lt;/li>
+&lt;li>&lt;code>r&lt;/code>、&lt;code>s&lt;/code>：签名的核心数据,分别对应椭圆曲线的 x 坐标部分&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>公钥恢复&lt;/strong>
+&lt;ul>
+&lt;li>&lt;code>ecrecover(msgHash, v, r, s)&lt;/code> → &lt;strong>非压缩公钥&lt;/strong>（65 字节,前缀 &lt;code>0x04&lt;/code> + X/Y 坐标）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 class="heading-element" id="12-技术流程">&lt;span>1.2 技术流程&lt;/span>
+ &lt;a href="#12-%e6%8a%80%e6%9c%af%e6%b5%81%e7%a8%8b" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>提取交易信息&lt;/strong>&lt;br>
+在区块浏览器（如 Etherscan）或通过节点 RPC 接口,找到目标地址发起的一笔交易,记录其中的：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>v, r, s&lt;/code>&lt;/li>
+&lt;li>交易哈希（或待签名数据哈希）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>调用 ecrecover&lt;/strong>&lt;br>
+可以在本地脚本（如 web3.py、ethers.js 等）中使用内置函数 &lt;code>ecrecover&lt;/code>(或等效实现)来恢复公钥.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>验证正确性&lt;/strong>&lt;br>
+以太坊地址 = &lt;code>Keccak-256(公钥去掉前缀 0x04 后 64 字节)&lt;/code> 的&lt;strong>后 20 字节&lt;/strong>.&lt;br>
+将恢复得到的地址与交易发起地址比对,如果一致则说明公钥获取无误.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>完成上述步骤后,我们便得到了该以太坊地址对应的&lt;strong>真实公钥&lt;/strong>（记为 &lt;code>PubKey_ETH&lt;/code>）.由于以太坊和比特币都采用 &lt;strong>secp256k1&lt;/strong> 曲线,这一公钥可被用于&lt;strong>任意&lt;/strong>基于 secp256k1 的区块链上进行地址推导.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="2-转换为比特币地址并在链上追查">&lt;span>2. 转换为比特币地址并在链上追查&lt;/span>
+ &lt;a href="#2-%e8%bd%ac%e6%8d%a2%e4%b8%ba%e6%af%94%e7%89%b9%e5%b8%81%e5%9c%b0%e5%9d%80%e5%b9%b6%e5%9c%a8%e9%93%be%e4%b8%8a%e8%bf%bd%e6%9f%a5" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;h3 class="heading-element" id="21-比特币地址生成规则">&lt;span>2.1 比特币地址生成规则&lt;/span>
+ &lt;a href="#21-%e6%af%94%e7%89%b9%e5%b8%81%e5%9c%b0%e5%9d%80%e7%94%9f%e6%88%90%e8%a7%84%e5%88%99" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>在比特币链上,最经典的地址生成方式是 &lt;strong>P2PKH&lt;/strong>（Pay to Public Key Hash）,即我们常见的以 &lt;code>1&lt;/code> 开头的比特币主网地址.生成流程概述如下：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>准备公钥&lt;/strong>&lt;br>
+一般使用&lt;strong>压缩公钥&lt;/strong>（33 字节,前缀 &lt;code>0x02&lt;/code> 或 &lt;code>0x03&lt;/code>）更常见,也可以使用非压缩公钥（65 字节）,只是地址会不同.&lt;/p>
+&lt;ul>
+&lt;li>若 &lt;code>PubKey_ETH&lt;/code> 是非压缩格式,需要根据 &lt;code>Y&lt;/code> 坐标的奇偶,转换出对应压缩格式.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>双哈希&lt;/strong>&lt;br>
+先对公钥做 &lt;code>SHA-256&lt;/code>,再对结果做 &lt;code>RIPEMD-160&lt;/code> → 得到 20 字节的 &lt;strong>PubKey Hash&lt;/strong>.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>版本前缀与校验和&lt;/strong>&lt;br>
+在主网下,P2PKH 前缀为 &lt;code>0x00&lt;/code>；然后对 “前缀 + PubKey Hash” 再做两次 &lt;code>SHA-256&lt;/code>,取前 4 字节作为校验和,拼接在后面.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Base58Check 编码&lt;/strong>&lt;br>
+最终可得到典型的 &lt;code>1xxxx...&lt;/code> 形式的比特币地址（记为 &lt;code>Addr_BTC&lt;/code>）.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>示例（Python 伪代码）：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">pub_key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">compress&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub_key_65&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 若需压缩&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">sha_1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">SHA256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pub_key&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">ripe_1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">RIPEMD160&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sha_1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">payload&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sa">b&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span>&lt;span class="se">\x00&lt;/span>&lt;span class="s1">&amp;#39;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">ripe_1&lt;/span> &lt;span class="c1"># 0x00为比特币P2PKH前缀&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">checksum&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">SHA256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">SHA256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">payload&lt;/span>&lt;span class="p">))[:&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">address_bytes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">payload&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">checksum&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">btc_address&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Base58CheckEncode&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">address_bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="c1"># 形如 1xxxx...&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 class="heading-element" id="22-在比特币链上验证实际交易">&lt;span>2.2 在比特币链上验证实际交易&lt;/span>
+ &lt;a href="#22-%e5%9c%a8%e6%af%94%e7%89%b9%e5%b8%81%e9%93%be%e4%b8%8a%e9%aa%8c%e8%af%81%e5%ae%9e%e9%99%85%e4%ba%a4%e6%98%93" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>有了 &lt;code>Addr_BTC&lt;/code> 后,我们需要在比特币区块浏览器（如 blockchain.com、btc.com 等）查询该地址是否&lt;strong>真有&lt;/strong>链上交易,且由它&lt;strong>主动&lt;/strong>发起过交易（即该地址作为输入的交易）.&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>查询交易记录&lt;/strong>&lt;br>
+如果 &lt;code>Addr_BTC&lt;/code> 从未有任何交易或仅仅收到过 BTC 而没有消费（花费）,则说明尚无证据表明&lt;strong>同一个私钥&lt;/strong>实际在比特币链上操作过.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>获取公钥以再次验证&lt;/strong>&lt;br>
+在比特币的 P2PKH 脚本中,当一个地址&lt;strong>花费&lt;/strong>对应的 UTXO 时,输入脚本会包含&lt;strong>签名&lt;/strong>和&lt;strong>公钥&lt;/strong>.&lt;/p>
+&lt;ul>
+&lt;li>区块浏览器通常可在输入脚本详情里看到签名和公钥（或解析后的信息）.&lt;/li>
+&lt;li>若该公钥与 &lt;code>PubKey_ETH&lt;/code>（或其压缩/非压缩等效形式）&lt;strong>完全一致&lt;/strong>,则可确认这是同一个私钥在比特币上签名的凭证.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;p>由此,我们实现了从以太坊到比特币的“&lt;strong>公钥跨链验证&lt;/strong>”——只有当在比特币区块上也能观察到该公钥用于签名的交易,才说明目标私钥确实跨链使用了.&lt;/p>
+&lt;hr>
+&lt;h2 class="heading-element" id="3-多链追查的意义">&lt;span>3. 多链追查的意义&lt;/span>
+ &lt;a href="#3-%e5%a4%9a%e9%93%be%e8%bf%bd%e6%9f%a5%e7%9a%84%e6%84%8f%e4%b9%89" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>一旦确认同一个私钥同时在以太坊和比特币上都有交易签名,就可以在更广的范围内分析该私钥的资金流向和交易行为：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>合规审计 / AML（反洗钱）&lt;/strong>&lt;br>
+监管机构或安全部门可以根据已知的以太坊地址,顺藤摸瓜查看是否在比特币网络也有活跃,进而更全面地掌握可疑资金的跨链转移路径.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>资产管理与风控&lt;/strong>&lt;br>
+一些多链钱包用户可能有意或无意地&lt;strong>复用&lt;/strong>同一个私钥.安全审计时需注意这一点——一旦某条链上私钥泄露,其他链上地址也会面临风险.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>研究和数据分析&lt;/strong>&lt;br>
+对多链生态的学术研究、市场分析或用户画像时,也可借助此方法发现跨链关联,为高维度数据分析提供帮助.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 class="heading-element" id="4-注意事项">&lt;span>4. 注意事项&lt;/span>
+ &lt;a href="#4-%e6%b3%a8%e6%84%8f%e4%ba%8b%e9%a1%b9" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>仅能对“主动发起过”交易的地址恢复公钥&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>在以太坊上,如果一个地址仅接收代币或转账而从未发起过交易,则无法通过 &lt;code>ecrecover&lt;/code> 获取它的公钥.&lt;/li>
+&lt;li>在比特币上,只有当某地址“花费”了它的 UTXO,才会在交易输入脚本里暴露公钥.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>同一私钥 ≠ 同一助记词&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>助记词 (BIP39) 可以派生出许多子私钥.即使两个地址共用同一个私钥,也不一定是同一助记词；用户也可能手工导入相同私钥到不同钱包.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>极小概率碰撞&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>理论上,不同助记词或随机生成方式可能极低概率地产生相同私钥,但概率极其微小（约 2^-256）,几乎可忽略不计.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>隐私与匿名&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>一旦在一条链上签名,就有可能被恢复出公钥,从而推导到其他链可能的地址；这在某些情况下会降低用户的匿名性与隐私保护.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;hr>
+&lt;h2 class="heading-element" id="5-总结">&lt;span>5. 总结&lt;/span>
+ &lt;a href="#5-%e6%80%bb%e7%bb%93" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>“&lt;strong>基于区块链交易公钥在多链进行跨链追查&lt;/strong>”的核心思路就是：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>先在一条链（如以太坊）上,通过已发起交易恢复公钥&lt;/strong>.&lt;/li>
+&lt;li>&lt;strong>将该公钥按照其他采用 secp256k1 曲线的区块链（如比特币）的地址生成规则进行转换&lt;/strong>.&lt;/li>
+&lt;li>&lt;strong>在目标链上查询是否有实际签名交易&lt;/strong>,并可进一步对比公钥来确认.&lt;/li>
+&lt;/ol>
+&lt;p>如果确有对应的签名交易,那就可以确定同一个私钥跨链使用,从而对资金流动和交易行为做更深层次的分析.这种方法在安全审计、合规检查、反洗钱以及多链资产研究等场景中都扮演着重要角色,为区块链行业的健康有序发展提供了技术支持.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>简而言之&lt;/strong>,只要能在以太坊上获取到实际公钥,就可在比特币乃至更多基于 secp256k1 的链上推导相应地址并查验是否存在签名交易.若确认有实际交易且公钥匹配,即可判定由&lt;strong>同一个私钥&lt;/strong>控制.这一跨链验证思路,对于打通区块链生态和深入挖掘跨链资金流向至关重要.&lt;/p>&lt;/blockquote></description></item></channel></rss>
