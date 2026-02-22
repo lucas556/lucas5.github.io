@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lucas's Blog</title><link>https://www.lucas6.xyz/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.3.20</generator><language>en</language><lastBuildDate>Sun, 22 Feb 2026 04:00:00 +0000</lastBuildDate><atom:link href="https://www.lucas6.xyz/index.xml" rel="self" type="application/rss+xml"/><item><title>基于 YubiKey 的冷钱包探索3：使用 FIDO2 派生 KEK 加密私钥并管理以太坊地址</title><link>https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A23%E4%BD%BF%E7%94%A8-fido2-%E6%B4%BE%E7%94%9F-kek-%E5%8A%A0%E5%AF%86%E7%A7%81%E9%92%A5%E5%B9%B6%E7%AE%A1%E7%90%86%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/</link><pubDate>Mon, 20 Oct 2025 00:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A23%E4%BD%BF%E7%94%A8-fido2-%E6%B4%BE%E7%94%9F-kek-%E5%8A%A0%E5%AF%86%E7%A7%81%E9%92%A5%E5%B9%B6%E7%AE%A1%E7%90%86%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/</guid><description>&lt;p>本篇文章以实用与工程实现为主,介绍一个基于 YubiKey(FIDO2)PRF 扩展的本地冷钱包思路：&lt;br>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lucas's Blog</title><link>https://www.lucas6.xyz/</link><description>一个专注于区块链安全/密码学和开发工具的技术博客. | A technical blog focused on blockchain security, cryptography, and developer tools.</description><generator>Hugo 0.147.7 &amp; FixIt v0.3.20</generator><language>en</language><lastBuildDate>Mon, 20 Oct 2025 00:00:00 +0800</lastBuildDate><atom:link href="https://www.lucas6.xyz/index.xml" rel="self" type="application/rss+xml"/><item><title>基于 YubiKey 的冷钱包探索3：使用 FIDO2 派生 KEK 加密私钥并管理以太坊地址</title><link>https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A23%E4%BD%BF%E7%94%A8-fido2-%E6%B4%BE%E7%94%9F-kek-%E5%8A%A0%E5%AF%86%E7%A7%81%E9%92%A5%E5%B9%B6%E7%AE%A1%E7%90%86%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/</link><pubDate>Mon, 20 Oct 2025 00:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/keys/%E5%9F%BA%E4%BA%8E-yubikey-%E7%9A%84%E5%86%B7%E9%92%B1%E5%8C%85%E6%8E%A2%E7%B4%A23%E4%BD%BF%E7%94%A8-fido2-%E6%B4%BE%E7%94%9F-kek-%E5%8A%A0%E5%AF%86%E7%A7%81%E9%92%A5%E5%B9%B6%E7%AE%A1%E7%90%86%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%9C%B0%E5%9D%80/</guid><description>&lt;p>本篇文章以实用与工程实现为主,介绍一个基于 YubiKey(FIDO2)PRF 扩展的本地冷钱包思路：&lt;br>
 使用 YubiKey 在用户触控与 PIN 验证后对&lt;strong>每条私钥&lt;/strong>计算一次 PRF(salt),再用 HKDF-SHA256 将 PRF 输出扩展为对称密钥(KEK),以 AES-256-GCM 加密私钥并把最小必要的元数据 (rp_id/credential_id/salt_prf/iv/ciphertext/address 等) 写入本地 &lt;code>privkey_keystore.json&lt;/code>.后续解密需要同一 YubiKey/同一 RP ID 与同一 credential_id,并在用户同意触控/输入 PIN 后复现 KEK 解密出私钥.&lt;/p>
 &lt;h2 class="heading-element" id="本文说明代码的设计逻辑关键安全考量使用方法与示例并提供源码链接与可下载的示例-keystore-结构说明">&lt;span>本文说明代码的设计逻辑/关键安全考量/使用方法与示例,并提供源码链接与可下载的示例 keystore 结构说明.&lt;/span>
  &lt;a href="#%e6%9c%ac%e6%96%87%e8%af%b4%e6%98%8e%e4%bb%a3%e7%a0%81%e7%9a%84%e8%ae%be%e8%ae%a1%e9%80%bb%e8%be%91%e5%85%b3%e9%94%ae%e5%ae%89%e5%85%a8%e8%80%83%e9%87%8f%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95%e4%b8%8e%e7%a4%ba%e4%be%8b%e5%b9%b6%e6%8f%90%e4%be%9b%e6%ba%90%e7%a0%81%e9%93%be%e6%8e%a5%e4%b8%8e%e5%8f%af%e4%b8%8b%e8%bd%bd%e7%9a%84%e7%a4%ba%e4%be%8b-keystore-%e7%bb%93%e6%9e%84%e8%af%b4%e6%98%8e" class="heading-mark">
@@ -1380,171 +1380,7 @@ GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquo
 &lt;li>&lt;strong>合规审计分析工具&lt;/strong>：可以还原交易结构与 txID,辅助监管与链上取证&lt;/li>
 &lt;li>&lt;strong>多签钱包或聚合交易系统&lt;/strong>：可灵活控制多笔交易批量构造与签名行为&lt;/li>
 &lt;/ul>
-&lt;hr></description></item><item><title>从区块链签名中恢复 secp256k1 公钥(Ethereum 实战)</title><link>https://www.lucas6.xyz/crypto/%E4%BB%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E7%AD%BE%E5%90%8D%E4%B8%AD%E6%81%A2%E5%A4%8D-secp256k1-%E5%85%AC%E9%92%A5ethereum-%E5%AE%9E%E6%88%98/</link><pubDate>Tue, 06 May 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/crypto/%E4%BB%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E7%AD%BE%E5%90%8D%E4%B8%AD%E6%81%A2%E5%A4%8D-secp256k1-%E5%85%AC%E9%92%A5ethereum-%E5%AE%9E%E6%88%98/</guid><description>&lt;p>文中所有数据为虚构,可根据实际情况从区块链获取.&lt;/p>
-&lt;h4 class="heading-element" id="注意使用助记词bip39bip44生成的地址使用了path每个地址的公钥也不同即不同的链的公钥和私钥是不同的不适合使用该方法无法使用公钥跨链追踪">&lt;span>注意:使用助记词(bip39/bip44)生成的地址使用了path,每个地址的公钥也不同(即不同的链的公钥和私钥是不同的),不适合使用该方法(无法使用公钥跨链追踪).&lt;/span>
- &lt;a href="#%e6%b3%a8%e6%84%8f%e4%bd%bf%e7%94%a8%e5%8a%a9%e8%ae%b0%e8%af%8dbip39bip44%e7%94%9f%e6%88%90%e7%9a%84%e5%9c%b0%e5%9d%80%e4%bd%bf%e7%94%a8%e4%ba%86path%e6%af%8f%e4%b8%aa%e5%9c%b0%e5%9d%80%e7%9a%84%e5%85%ac%e9%92%a5%e4%b9%9f%e4%b8%8d%e5%90%8c%e5%8d%b3%e4%b8%8d%e5%90%8c%e7%9a%84%e9%93%be%e7%9a%84%e5%85%ac%e9%92%a5%e5%92%8c%e7%a7%81%e9%92%a5%e6%98%af%e4%b8%8d%e5%90%8c%e7%9a%84%e4%b8%8d%e9%80%82%e5%90%88%e4%bd%bf%e7%94%a8%e8%af%a5%e6%96%b9%e6%b3%95%e6%97%a0%e6%b3%95%e4%bd%bf%e7%94%a8%e5%85%ac%e9%92%a5%e8%b7%a8%e9%93%be%e8%bf%bd%e8%b8%aa" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h4>&lt;p>本文代码已托管：
-📎 &lt;a href="https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py"target="_blank" rel="external nofollow noopener noreferrer">https://github.com/lucas556/Blockchain-Tools/blob/main/TRON/sig2pub.py&lt;/a>&lt;/p>
-&lt;h2 class="heading-element" id="为什么要恢复公钥">&lt;span>为什么要恢复公钥？&lt;/span>
- &lt;a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e6%81%a2%e5%a4%8d%e5%85%ac%e9%92%a5" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;p>在区块链的世界里,私钥签名、公钥验证是最基本也最重要的安全机制之一.&lt;/p>
-&lt;p>我们通常：&lt;/p>
-&lt;ul>
-&lt;li>使用私钥对一笔交易进行签名&lt;/li>
-&lt;li>网络节点用公钥验证这笔交易是否合法&lt;/li>
-&lt;/ul>
-&lt;h2 class="heading-element" id="背景知识">&lt;span>背景知识&lt;/span>
- &lt;a href="#%e8%83%8c%e6%99%af%e7%9f%a5%e8%af%86" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;h3 class="heading-element" id="签名结构">&lt;span>签名结构&lt;/span>
- &lt;a href="#%e7%ad%be%e5%90%8d%e7%bb%93%e6%9e%84" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>区块链签名基于椭圆曲线 secp256k1,结构通常为 (r, s, v)：&lt;/p>
-&lt;ul>
-&lt;li>&lt;code>r&lt;/code>：签名的第一部分&lt;/li>
-&lt;li>&lt;code>s&lt;/code>：签名的第二部分&lt;/li>
-&lt;li>&lt;code>v&lt;/code>：恢复参数,用于帮助从签名中恢复对应的公钥&lt;/li>
-&lt;/ul>
-&lt;h3 class="heading-element" id="raw_data-是什么">&lt;span>raw_data 是什么？&lt;/span>
- &lt;a href="#raw_data-%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;p>&lt;code>raw_data&lt;/code>：是一笔交易在签名前的原始字节数据,系统会先对其 SHA256 响应,将响应结果用于签名.&lt;/p>
-&lt;h2 class="heading-element" id="核心原理简图">&lt;span>核心原理简图&lt;/span>
- &lt;a href="#%e6%a0%b8%e5%bf%83%e5%8e%9f%e7%90%86%e7%ae%80%e5%9b%be" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">raw_data --SHA256--&amp;gt; message_hash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> |
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ↓
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> signature (r, s, v) + message_hash
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> |
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ↓
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> recover → public key&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 class="heading-element" id="使用-python-实现公钥恢复">&lt;span>使用 Python 实现公钥恢复&lt;/span>
- &lt;a href="#%e4%bd%bf%e7%94%a8-python-%e5%ae%9e%e7%8e%b0%e5%85%ac%e9%92%a5%e6%81%a2%e5%a4%8d" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h2>&lt;h3 class="heading-element" id="安装依赖">&lt;span>安装依赖&lt;/span>
- &lt;a href="#%e5%ae%89%e8%a3%85%e4%be%9d%e8%b5%96" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">pip install eth-keys&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h3 class="heading-element" id="编写恢复函数">&lt;span>编写恢复函数&lt;/span>
- &lt;a href="#%e7%bc%96%e5%86%99%e6%81%a2%e5%a4%8d%e5%87%bd%e6%95%b0" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">hashlib&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">eth_keys.datatypes&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">Signature&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">recover_public_key_from_tron_signature&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">raw_data_hex&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">signature_hex&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">raw_data_bytes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fromhex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">raw_data_hex&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">message_hash&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">hashlib&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sha256&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">raw_data_bytes&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">digest&lt;/span>&lt;span class="p">()&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">signature_bytes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">bytes&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fromhex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">signature_hex&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">signature_bytes&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="mi">65&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="ne">ValueError&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;签名必须是 65 字节 (r:32 + s:32 + v:1)&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">r&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">signature_bytes&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">32&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">signature_bytes&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">32&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="mi">64&lt;/span>&lt;span class="p">],&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">v&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">signature_bytes&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">64&lt;/span>&lt;span class="p">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="n">v&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="mi">27&lt;/span>&lt;span class="p">:&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">v&lt;/span> &lt;span class="o">-=&lt;/span> &lt;span class="mi">27&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sig&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Signature&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">vrs&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">v&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">r&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">s&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">public_key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">sig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">recover_public_key_from_msg_hash&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">message_hash&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">public_key&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_bytes&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">()&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h3 class="heading-element" id="示例演示">&lt;span>示例演示&lt;/span>
- &lt;a href="#%e7%a4%ba%e4%be%8b%e6%bc%94%e7%a4%ba" class="heading-mark">
- &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
- &lt;/a>
-&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">raw_data_hex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;0a0265782208706c61792d6d6f6465120f0a0b08c0843d1215e1a0e7c2d103&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">signature_hex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;7db18bd6ccfffd4f8a5c208a3fd3f34d8f6e2db6f6ea84539b1b3e42b3d47809&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;79f18e5f741188cb80795d5f8a590b92edbb3e351c80e58208e7b4bbdcbb4ffb1b&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">recover_public_key_from_tron_signature&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">raw_data_hex&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">signature_hex&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>&lt;strong>输出结果：&lt;/strong>&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">Message Hash (SHA256 of raw_data): 9f1430d6ee3d00b8bd5f2a78cbf60b683bdd3d3e1a7b2cf361942c5e110ce1a1
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Parsed Signature:
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> r = 0x7db18bd6ccfffd4f8a5c208a3fd3f34d8f6e2db6f6ea84539b1b3e42b3d47809
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> s = 0x79f18e5f741188cb80795d5f8a590b92edbb3e351c80e58208e7b4bbdcbb4ffb
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> v = 1
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Recovered Public Key (hex): 04a3f5d0c72ae1955bbf61a69b276bda7e3a7dcff4790d85e3c166e2c99f3b37d3d5f31a7e8876e37e63c6d2dfd4717e7e8c5f8c99b624d6c1441188ac11bca5ed&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>该公钥为未压缩格式,长度为 130 个 hex 字符 (65 字节),前缀 &lt;code>04&lt;/code> 表示未压缩格式.&lt;/p></description></item><item><title>基于区块链交易公钥在多链进行跨链追查: 原理与实践</title><link>https://www.lucas6.xyz/crypto/%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E4%BA%A4%E6%98%93%E5%85%AC%E9%92%A5%E5%9C%A8%E5%A4%9A%E9%93%BE%E8%BF%9B%E8%A1%8C%E8%B7%A8%E9%93%BE%E8%BF%BD%E6%9F%A5-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</link><pubDate>Fri, 28 Feb 2025 01:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E4%BA%A4%E6%98%93%E5%85%AC%E9%92%A5%E5%9C%A8%E5%A4%9A%E9%93%BE%E8%BF%9B%E8%A1%8C%E8%B7%A8%E9%93%BE%E8%BF%BD%E6%9F%A5-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</guid><description>&lt;p>随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个&lt;strong>普适的技术思路&lt;/strong>：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.&lt;/p>
+&lt;hr></description></item><item><title>基于区块链交易公钥在多链进行跨链追查: 原理与实践</title><link>https://www.lucas6.xyz/crypto/%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E4%BA%A4%E6%98%93%E5%85%AC%E9%92%A5%E5%9C%A8%E5%A4%9A%E9%93%BE%E8%BF%9B%E8%A1%8C%E8%B7%A8%E9%93%BE%E8%BF%BD%E6%9F%A5-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</link><pubDate>Fri, 28 Feb 2025 01:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/%E5%9F%BA%E4%BA%8E%E5%8C%BA%E5%9D%97%E9%93%BE%E4%BA%A4%E6%98%93%E5%85%AC%E9%92%A5%E5%9C%A8%E5%A4%9A%E9%93%BE%E8%BF%9B%E8%A1%8C%E8%B7%A8%E9%93%BE%E8%BF%BD%E6%9F%A5-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</guid><description>&lt;p>随着区块链技术的不断发展,越来越多的项目和资金分散在不同的区块链网络中.对于合规审计、安全追踪和资金流动分析等场景,如何确定同一个私钥是否在多条链上产生实际交易,往往是突破口之一.本文将介绍一个&lt;strong>普适的技术思路&lt;/strong>：通过在某条链(如以太坊)获取交易公钥,再将其转换到另一条采用相同椭圆曲线(secp256k1)的链(如比特币),进而在该链上验证是否有对应的签名交易,从而确认是否确系同一私钥所控.&lt;/p>
 &lt;hr>
 &lt;h2 class="heading-element" id="1-从以太坊交易中获取公钥">&lt;span>1. 从以太坊交易中获取公钥&lt;/span>
  &lt;a href="#1-%e4%bb%8e%e4%bb%a5%e5%a4%aa%e5%9d%8a%e4%ba%a4%e6%98%93%e4%b8%ad%e8%8e%b7%e5%8f%96%e5%85%ac%e9%92%a5" class="heading-mark">
@@ -1728,4 +1564,107 @@ GPG 直接生成 Ethereum 钱包地址,构建冷钱包体系&lt;/p>&lt;/blockquo
 &lt;/ol>
 &lt;p>如果确有对应的签名交易,那就可以确定同一个私钥跨链使用,从而对资金流动和交易行为做更深层次的分析.这种方法在安全审计、合规检查、反洗钱以及多链资产研究等场景中都扮演着重要角色,为区块链行业的健康有序发展提供了技术支持.&lt;/p>
 &lt;blockquote>
-&lt;p>&lt;strong>简而言之&lt;/strong>,只要能在以太坊上获取到实际公钥,就可在比特币乃至更多基于 secp256k1 的链上推导相应地址并查验是否存在签名交易.若确认有实际交易且公钥匹配,即可判定由&lt;strong>同一个私钥&lt;/strong>控制.这一跨链验证思路,对于打通区块链生态和深入挖掘跨链资金流向至关重要.&lt;/p>&lt;/blockquote></description></item></channel></rss>
+&lt;p>&lt;strong>简而言之&lt;/strong>,只要能在以太坊上获取到实际公钥,就可在比特币乃至更多基于 secp256k1 的链上推导相应地址并查验是否存在签名交易.若确认有实际交易且公钥匹配,即可判定由&lt;strong>同一个私钥&lt;/strong>控制.这一跨链验证思路,对于打通区块链生态和深入挖掘跨链资金流向至关重要.&lt;/p>&lt;/blockquote></description></item><item><title>Generating Blockchain Private Key</title><link>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</link><pubDate>Wed, 23 Oct 2024 00:00:00 +0800</pubDate><guid>https://www.lucas6.xyz/crypto/generating-blockchain-private-key/</guid><description>&lt;h2 class="heading-element" id="introduction">&lt;span>Introduction&lt;/span>
+ &lt;a href="#introduction" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>One of the most critical aspects of blockchain technology is cryptographic security，and private key generation is essential for safeguarding users&amp;rsquo; assets．In this post，we will explore how to use Python to generate a 256-bit blockchain private key and convert it into a hexadecimal representation．This simple Python code leverages built-in libraries like &lt;code>os&lt;/code> and &lt;code>functools&lt;/code>，making it easy to understand，especially for beginners．&lt;/p>
+&lt;h2 class="heading-element" id="core-code-for-private-key-generation">&lt;span>Core Code for Private Key Generation&lt;/span>
+ &lt;a href="#core-code-for-private-key-generation" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>The following code demonstrates how to generate a private key consisting of eight 32-bit unsigned integers（256 bits total）and convert it into a hexadecimal string．&lt;/p>
+&lt;h3 class="heading-element" id="code-breakdown">&lt;span>Code Breakdown&lt;/span>
+ &lt;a href="#code-breakdown" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">os&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">from&lt;/span> &lt;span class="nn">functools&lt;/span> &lt;span class="kn">import&lt;/span> &lt;span class="n">reduce&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">randomUInt32&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Generate a random 32-bit unsigned integer&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">from_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">os&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">urandom&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;little&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">signed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">False&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">randomUInt32Array&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">count&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">]:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Generate an array containing &amp;#39;count&amp;#39; 32-bit unsigned integers&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="n">randomUInt32&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">count&lt;/span>&lt;span class="p">)]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">key_to_hex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">k&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">list&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">])&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Convert the array of 32-bit unsigned integers to a hexadecimal string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">reduce&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">lambda&lt;/span> &lt;span class="n">s&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="nb">str&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">s&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">t&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="n">k&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">:],&lt;/span> &lt;span class="n">k&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">to_bytes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">byteorder&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;big&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">hex&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;__main__&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Generate a private key consisting of 8 random 32-bit unsigned integers（256 bits）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">random_key_array&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">randomUInt32Array&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Convert the array of random integers to a hexadecimal private key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">private_key_hex&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">key_to_hex&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">random_key_array&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Output the generated private key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;Generated Random Key（Private Key）: &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">private_key_hex&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 class="heading-element" id="explanation-of-the-code">&lt;span>Explanation of the Code&lt;/span>
+ &lt;a href="#explanation-of-the-code" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;h3 class="heading-element" id="generating-random-numbers">&lt;span>Generating Random Numbers：&lt;/span>
+ &lt;a href="#generating-random-numbers" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>The &lt;code>randomUInt32&lt;/code> function uses &lt;code>os.urandom(4)&lt;/code> to generate 4 bytes of random data，then converts it into a 32-bit unsigned integer using &lt;code>int.from_bytes&lt;/code>．&lt;/p>
+&lt;h3 class="heading-element" id="generating-an-array-of-private-key-integers">&lt;span>Generating an Array of Private Key Integers：&lt;/span>
+ &lt;a href="#generating-an-array-of-private-key-integers" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>The &lt;code>randomUInt32Array(count)&lt;/code> function creates an array of &lt;code>count&lt;/code> 32-bit unsigned integers．In our case，we generate 8 integers to form a 256-bit key．&lt;/p>
+&lt;h3 class="heading-element" id="converting-to-hexadecimal">&lt;span>Converting to Hexadecimal：&lt;/span>
+ &lt;a href="#converting-to-hexadecimal" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>The &lt;code>key_to_hex(k)&lt;/code> function converts the array of 32-bit integers into a single hexadecimal string，which is the typical format used to represent blockchain private keys．&lt;/p>
+&lt;h3 class="heading-element" id="output-example">&lt;span>Output Example&lt;/span>
+ &lt;a href="#output-example" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h3>&lt;p>When you run this code，it generates a random 256-bit private key and prints its hexadecimal representation．Example output：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">Generated Random Key（Private Key）: e8b7dfae9f43c9b1781b236e9b91adf5d47c233ffadb78e1a9c16a907b21c3e8&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 class="heading-element" id="conclusion">&lt;span>Conclusion&lt;/span>
+ &lt;a href="#conclusion" class="heading-mark">
+ &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
+ &lt;/a>
+&lt;/h2>&lt;p>This Python script demonstrates how to generate a private key for blockchain applications using random numbers and converting it into a hexadecimal format．The use of &lt;code>os.urandom&lt;/code> ensures a high level of randomness，crucial for secure private key generation．&lt;/p>
+&lt;p>The script provides a foundational understanding of how private keys work in blockchain systems．It can be expanded to include public key generation，signing transactions，and other cryptographic functions relevant to blockchain．&lt;/p></description></item></channel></rss>
