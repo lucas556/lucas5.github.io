@@ -919,24 +919,9 @@ A: 技术上直接使用 PRF(salt) 的 32 字节作为 AES-256 密钥是可行�
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>
  &lt;/a>
 &lt;/h2>&lt;ul>
-&lt;li>
-&lt;p>Cross-Chain Public Key Tracing&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>TRON Offline Transaction Signing&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Prevent ERC20 Approval Scams&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;a href="https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/">Cross-Chain Public Key Tracing&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;a href="https://www.lucas6.xyz/blockchain/tron-offline-transaction-signing-python/">TRON Offline Transaction Signing&lt;/a>&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;a href="https://www.lucas6.xyz/security/prevent-erc20-approval-scams-proactive-defense-node/">Prevent ERC20 Approval Scams&lt;/a>&lt;/p>
-&lt;/li>
+&lt;li>&lt;a href="https://www.lucas6.xyz/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/">Cross-Chain Public Key Tracing&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.lucas6.xyz/blockchain/tron-offline-transaction-signing-python/">TRON Offline Transaction Signing&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://www.lucas6.xyz/security/prevent-erc20-approval-scams-proactive-defense-node/">Prevent ERC20 Approval Scams&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>Prevent ERC20 Approval Scams: Building a Proactive Ethereum Defense RPC Node with Cloudflare Workers</title><link>https://www.lucas6.xyz/security/prevent-erc20-approval-scams-proactive-defense-node/</link><pubDate>Sun, 03 Aug 2025 00:00:00 +0000</pubDate><guid>https://www.lucas6.xyz/security/prevent-erc20-approval-scams-proactive-defense-node/</guid><description>&lt;h2 class="heading-element" id="abstract">&lt;span>Abstract&lt;/span>
  &lt;a href="#abstract" class="heading-mark">
  &lt;svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">&lt;path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z">&lt;/path>&lt;/svg>

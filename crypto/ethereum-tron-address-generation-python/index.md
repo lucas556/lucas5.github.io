@@ -96,10 +96,6 @@ if __name__ == "__main__":
 
 ## Related Articles
 
--   Cross-Chain Public Key Tracing
--   TRON Offline Transaction Signing
--   Prevent ERC20 Approval Scams
-
 - [Cross-Chain Public Key Tracing](/crypto/cross-chain-public-key-tracing-ethereum-bitcoin/)
 - [TRON Offline Transaction Signing](/blockchain/tron-offline-transaction-signing-python/)
 - [Prevent ERC20 Approval Scams](/security/prevent-erc20-approval-scams-proactive-defense-node/)
