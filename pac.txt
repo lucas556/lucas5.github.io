@@ -5,3 +5,5 @@
 ||openai.com
 ||chatgpt.com
 ||reddit.com
+||pancakeswap.finance
+||uniswap.org
